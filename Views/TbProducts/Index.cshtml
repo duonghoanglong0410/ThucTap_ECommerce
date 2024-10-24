@@ -1,194 +1,254 @@
 ﻿@model IEnumerable<TT_ECommerce.Models.EF.TbProduct>
 
-@{
-    Layout = "~/Views/Shared/_CategoryLayout.cshtml"; 
-    ViewData["Title"] = "Danh Mục Sản Phẩm";
-}
 
-<div class="untree_co-section product-section before-footer-section">
+@{
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+    int categoryIndex = 1;
+
+}
+<!-- Breadcrumb -->
+<section class="section-breadcrumb margin-b-50">
     <div class="container">
         <div class="row">
+            <div class="col-12">
+                <div class="row bb-breadcrumb-inner">
+                    <div class="col-md-6 col-sm-12">
+                        <h2 class="bb-breadcrumb-title">Shop Page</h2>
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <ul class="bb-breadcrumb-list">
+                            <li class="bb-breadcrumb-item"><a href="index-2.html">Home</a></li>
+                            <li><i class="ri-arrow-right-double-fill"></i></li>
+                            <li class="bb-breadcrumb-item active">Shop Page</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-            <div class="col-12 col-md-4 col-lg-3 mb-5">
-                <div class="categories">
-                    <h3 class="category-title">Categories</h3>
-                    
-                    
 
+<!-- Shop section -->
+<section class="section-shop padding-b-50">
+    <div class="container">
+        <div class="row">
+            <div class="bb-shop-overlay"></div>
+            <div class="col-lg-3 col-12 bb-shop-sidebar">
+                <div class="sidebar-filter-title">
+                    <h5>Filters</h5>
+                    <a class="filter-close" href="javascript:void(0)">×</a>
+                </div>
+                <div class="bb-shop-wrap">
                     <form id="filterForm" method="get">
                         @{
                             // Lấy categoryId từ query và chuyển thành mảng string[]
                             var categoryIds = ViewContext.HttpContext.Request.Query["categoryId"].ToString();
                             string[] selectedCategoryIds = categoryIds.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
                         }
+                        <div class="bb-sidebar-block">
+                            <div class="bb-sidebar-title">
+                                <h3>Category</h3>
+                            </div>
+                            <div class="bb-sidebar-contact">
+                                <form id="filterForm" method="get">
+                                    <ul>
+                                        <!-- Checkbox cho tùy chọn "All" -->
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" name="categoryId" value="" class="category-filter"
+                                                @(selectedCategoryIds.Length == 0 ? "checked" : "")> All
+                                            </label>
+                                        </li>
 
-                        <ul class="category-list">
-                            <li>
-                                <label>
-                                    <input type="checkbox" name="categoryId" value="" class="category-filter"
-                                    @(selectedCategoryIds.Length == 0 ? "checked" : "")> All
-                                </label>
-                            </li>
-                            @foreach (var category in ViewBag.Categories)
-                            {
-                                <li>
-                                    <label>
-                                        <input type="checkbox" name="categoryId" value="@category.Id" class="category-filter"
-                                        @(Array.IndexOf(selectedCategoryIds, category.Id.ToString()) >= 0 ? "checked" : "")> @category.Title
-                                    </label>
-                                </li>
-                            }
-                        </ul>
-                        <!-- Thanh tìm kiếm sản phẩm -->
-                        <h4 class="filter-title">Search Products</h4>
-                        <input type="text" name="searchKeyword" id="searchKeyword" class="form-control" style="padding : 10px" placeholder="Enter product name" value="@ViewContext.HttpContext.Request.Query["searchKeyword"]" />
-                        <!-- Lọc theo giá -->
-                        <h4 class="filter-title">Filter by price</h4>
-                        <div class="filter-price-slider">
-                            $<span id="min-price">0</span>
-                            @{
-                                var maxPrice = ViewContext.HttpContext.Request.Query["maxPrice"].ToString();
-                                if (string.IsNullOrEmpty(maxPrice))
-                                {
-                                    maxPrice = "1500";
-                                }
-                            }
-                            <input type="range" id="priceRange"
-                                   min="0"
-                                   max="1500"
-                                   value="@maxPrice"
-                                   step="100"
-                                   name="maxPrice"
-                                   class="price-filter"
-                                   oninput="updatePriceRange()" />
-                            $<span id="display-max-price">@maxPrice</span>
+                                        <!-- Vòng lặp qua các danh mục và hiển thị checkbox tương ứng -->
+                                        @foreach (var category in ViewBag.Categories)
+                                        {
+                                            <li>
+                                                <label>
+                                                    <input type="checkbox" name="categoryId" value="@category.Id" class="category-filter"
+                                                    @(Array.IndexOf(selectedCategoryIds, category.Id.ToString()) >= 0 ? "checked" : "")> @category.Title
+                                                </label>
+                                            </li>
+                                        }
+                                    </ul>
+                                    <!-- Nút button để lọc sản phẩm -->
+                                    <button type="submit" class="btn btn-secondary" style="margin-top: 10px;">Filter</button>
+                                </form>
+                            </div>
+
+
                         </div>
-
-                        <!-- Sắp xếp theo giá -->
-                        <div class="sort-price">
-                            <h4 class="filter-title" for="sortOrder">Sort by price:</h4>
-                            <select name="sortOrder" id="sortOrder" class="form-control">
-                                <option value="">Default</option>
-                                @if (ViewBag.SortOrder == "price_asc")
-                                {
-                                    <option value="price_asc" selected="selected">Prices gradually increase</option>
-                                }
-                                else
-                                {
-                                    <option value="price_asc">Prices gradually increase</option>
-                                }
-
-                                @if (ViewBag.SortOrder == "price_desc")
-                                {
-                                    <option value="price_desc" selected="selected">Prices gradually decrease</option>
-                                }
-                                else
-                                {
-                                    <option value="price_desc">Prices gradually decrease</option>
-                                }
-                            </select>
+                        <div class="bb-sidebar-block">
+                            <div class="bb-sidebar-title">
+                                <h3>Price</h3>
+                            </div>
+                            <div class="bb-price-range">
+                                <div class="filter-price-slider">
+                                    $<span id="min-price">0</span>
+                                    @{
+                                        var maxPrice = ViewContext.HttpContext.Request.Query["maxPrice"].ToString();
+                                        if (string.IsNullOrEmpty(maxPrice))
+                                        {
+                                            maxPrice = "1500";
+                                        }
+                                    }
+                                    <input type="range" id="priceRange"
+                                           min="0"
+                                           max="1500"
+                                           value="@maxPrice"
+                                           step="100"
+                                           name="maxPrice"
+                                           class="price-filter"
+                                           oninput="updatePriceRange()" />
+                                    $<span id="display-max-price">@maxPrice</span>
+                                </div>
+                            </div>
                         </div>
-
                         <button class="btn btn-secondary me-2" type="submit" style="margin-top: 10px">Filter</button>
+
                     </form>
                 </div>
             </div>
-
-            <!-- Product Items Section -->
-            <div class="col-12 col-md-8 col-lg-9">
-                <div class="row" id="product-list">
-                    @foreach (var product in Model)
-                    {
-                        <div class="col-12 col-md-6 col-lg-4 mb-5">
-                            <div class="product-item">
-                                <img src="@Url.Content(product.Image)" class="img-fluid product-thumbnail" alt="Product Image" />
-                                @* <a href="@Url.Action("ProductDetails", new { id = product.Id })" style="text-decoration: none;">
-                                    <h3 class="product-title">@product.Title</h3>
-                                </a> *@
-                                @* truyền vào file index chạy trong file ProductDetails *@
-                                    <a href="@Url.Action("Index", "ProductDetails", new { id = product.Id })" target="_blank" style="text-decoration: none;">
-                                      <h3 class="product-title">@product.Title</h3> 
-    </a>
-
-                                @if (product.IsSale)
-                                {
-                                    <!-- Hiển thị giá khuyến mãi nếu sản phẩm đang giảm giá -->
-                                    <strong class="product-price">@product.PriceSale</strong>
-                                    <span class="original-price" style="text-decoration: line-through;">@product.Price.ToString("C")</span>
-                                }
-                                else
-                                {
-                                    <!-- Hiển thị giá gốc nếu không có giảm giá -->
-                                    <strong class="product-price">@product.Price.ToString("C")</strong>
-                                }
-                                <span class="icon-cross">
-                                    <img src="~/images/cross.svg" class="img-fluid" />
-                                </span>
+            <div class="col-12">
+                <div class="bb-shop-pro-inner">
+                    <div class="row mb-minus-24">
+                        <div class="col-12">
+                            <div class="bb-pro-list-top">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="bb-bl-btn">
+                                            <button type="button" class="grid-btn btn-filter">
+                                                <i class="ri-equalizer-2-line"></i>
+                                            </button>
+                                            <button type="button" class="grid-btn btn-grid-100 active">
+                                                <i class="ri-apps-line"></i>
+                                            </button>
+                                            <button type="button" class="grid-btn btn-list-100">
+                                                <i class="ri-list-unordered"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="bb-select-inner">
+                                            <div class="custom-select">
+                                                <select>
+                                                    <option selected disabled>Sort by</option>
+                                                    <option value="1">Position</option>
+                                                    <option value="2">Relevance</option>
+                                                    <option value="3">Name, A to Z</option>
+                                                    <option value="4">Name, Z to A</option>
+                                                    <option value="5">Price, low to high</option>
+                                                    <option value="6">Price, high to low</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    }
-                </div>
-
-                <!-- Phân trang -->
-                <nav aria-label="Page navigation">
-                    <ul class="pagination justify-content-center">
-                        @for (var i = 1; i <= (ViewBag.TotalItems + ViewBag.PageSize - 1) / ViewBag.PageSize; i++)
+                        @foreach (var product in Model)
                         {
-                            <li class="page-item @(ViewBag.Page == i ? "active" : "")">
-                                <a class="page-link" href="?page=@i&sortOrder=@ViewBag.SortOrder&categoryId=@ViewContext.HttpContext.Request.Query["categoryId"]&maxPrice=@ViewContext.HttpContext.Request.Query["maxPrice"]">@i</a>
-                            </li>
+                            <div class="col-lg-3 col-md-4 col-6 mb-24 bb-product-box pro-bb-content" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+
+                                <div class="bb-pro-box">
+
+
+
+                                    <div class="bb-pro-img">
+                                        <a href="javascript:void(0)">
+                                            <div class="inner-img">
+                                                <img class="main-img" src="@Url.Content(@product.Image)"
+                                                     alt="@product.Title">
+                                                <img class="hover-img" src="@Url.Content(@product.Image)"
+                                                     alt="@product.Title">
+                                            </div>
+                                        </a>
+                                        <ul class="bb-pro-actions">
+                                            <li class="bb-btn-group">
+                                                <a href="javascript:void(0)">
+                                                    <i class="ri-heart-line"></i>
+                                                </a>
+                                            </li>
+                                            <li class="bb-btn-group">
+                                                <a href="#">
+                                                    <i class="ri-eye-line"></i>
+                                                </a>
+                                            </li>
+                                            <li class="bb-btn-group">
+                                                <a href="compare.html">
+                                                    <i class="ri-repeat-line"></i>
+                                                </a>
+                                            </li>
+                                            <li class="bb-btn-group">
+                                                <a asp-area="" asp-controller="ProductDetails" asp-action="AddToCart">
+                                                    <i class="ri-shopping-bag-4-line"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="bb-pro-contact">
+                                        <div class="bb-pro-subtitle">
+                                            <a href="shop-left-sidebar-col-3.html">@product.ProductCategory.Title</a>
+                                            <span class="bb-pro-rating">
+                                                <i class="ri-star-fill"></i>
+                                                <i class="ri-star-fill"></i>
+                                                <i class="ri-star-fill"></i>
+                                                <i class="ri-star-fill"></i>
+                                                <i class="ri-star-line"></i>
+                                            </span>
+                                        </div>
+                                        <h4 class="bb-pro-title">
+                                            <a href="product-left-sidebar.html">@product.Title</a>
+                                        </h4>
+                                        <p>
+                                            @product.Detail
+                                        </p>
+                                        <div class="bb-price">
+                                            <div class="inner-price">
+                                                @if (product.PriceSale > 0)
+                                                {
+                                                    <span class="new-price">@product.PriceSale</span>
+                                                    <span class="old-price" style="text-decoration: line-through;">@product.Price</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="old-price">@product.Price</span>
+                                                }
+                                            </div>
+                                            <span class="last-items">1 sản phẩm</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
                         }
-                    </ul>
-                </nav>
+                        <div class="col-12">
+                            <div class="bb-pro-pagination">
+                                <p>Showing 1-12 of 21 item(s)</p>
+                                <ul>
+                                    <li class="active">
+                                        <a href="javascript:void(0)">1</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)">2</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)">3</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)">4</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0)" class="next">Next <i class="ri-arrow-right-s-line"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
-<script>
-    function updatePriceRange() {
-        var priceRange = document.getElementById("priceRange");
-        var displayMaxPrice = document.getElementById("display-max-price");
-
-        // Cập nhật giá trị hiển thị của thanh trượt
-        displayMaxPrice.textContent = priceRange.value;
-    }
-
-    document.getElementById('filterForm').addEventListener('submit', function (event) {
-        event.preventDefault(); // Ngăn chặn việc gửi form mặc định
-        var form = this;
-
-        // Lấy tất cả các checkbox có tên "categoryId" đã được chọn
-        var categoryIds = [];
-        var checkboxes = document.querySelectorAll('input[name="categoryId"]:checked');
-        checkboxes.forEach(function (checkbox) {
-            if (checkbox.value) { // Bỏ qua checkbox có giá trị rỗng (All)
-                categoryIds.push(checkbox.value);
-            }
-        });
-
-        // Tạo URL với các tham số mong muốn
-        var url = new URL(window.location.href);
-
-        // Gộp categoryId thành chuỗi cách nhau bằng dấu phẩy
-        url.searchParams.set('categoryId', categoryIds.join(','));
-
-        // Cập nhật các tham số khác (maxPrice và sortOrder)
-        var maxPrice = form.querySelector('input[name="maxPrice"]').value;
-        url.searchParams.set('maxPrice', maxPrice);
-
-        var sortOrder = form.querySelector('select[name="sortOrder"]').value;
-        url.searchParams.set('sortOrder', sortOrder);
-        // search
-        var searchKeyword = form.querySelector('input[name="searchKeyword"]').value;
-        url.searchParams.set('searchKeyword', searchKeyword);
-
-        // Xóa tham số 'page' nếu có (để luôn chuyển về trang 1 khi lọc)
-        url.searchParams.delete('page');
-
-        // Chuyển hướng tới URL mới
-        window.location.href = url.toString();
-    });
-</script>
-
-
+</section>

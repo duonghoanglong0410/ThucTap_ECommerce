@@ -2,48 +2,62 @@
 
 @{
     ViewData["Title"] = "Login";
-    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
 }
 
-<section class="sign-in">
+<!-- Breadcrumb -->
+<section class="section-breadcrumb margin-b-50">
     <div class="container">
-        <div class="signin-content">
-            <div class="signin-image">
-                <figure><img src="~/images/signin-image.jpg" alt="sing up image"></figure>
-                        
-                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Create an account</a>
+        <div class="row">
+            <div class="col-12">
+                <div class="row bb-breadcrumb-inner">
+                    <div class="col-md-6 col-sm-12">
+                        <h2 class="bb-breadcrumb-title">Login</h2>
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <ul class="bb-breadcrumb-list">
+                            <li class="bb-breadcrumb-item"><a href="index-2.html">Home</a></li>
+                            <li><i class="ri-arrow-right-double-fill"></i></li>
+                            <li class="bb-breadcrumb-item active">Login</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
+        </div>
+    </div>
+</section>
 
-            <div class="signin-form">
-                <h2 class="form-title">Sign In</h2>
-                <form asp-action="Login">
-                    <div class="form-group">
-                        <label class="control-label"><i class="zmdi zmdi-account material-icons-name"></i></label>
-                        <input asp-for="UsernameOrEmail" class="form-control" placeholder="Your Email" />
-                               
+<!-- Login -->
+<section class="section-login padding-tb-50">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="section-title bb-center" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+                    <div class="section-detail">
+                        <h2 class="bb-title">Log <span>In</span></h2>
+                        <p>Best place to buy and sell digital products</p>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label"> <i class="zmdi zmdi-lock"></i></label>
-                        <input asp-for="Password" type="password" class="form-control" placeholder="Password" />
-                               
-                    </div>
-
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="ForgotPassword">Forgot Password</a>
-                    <div class="form-group form-check">
-                        <input asp-for="RememberMe" class="form-check-input" />
-                        <label asp-for="RememberMe" class="form-check-label">Remember me</label>
-                    </div>
-                    <div class="form-group form-button">
-                        <input type="submit" value="Login" class="form-submit" />
-                    </div>
-                </form>
-                <div class="social-login">
-                    <span class="social-label">Or login with</span>
-                    <ul class="socials">
-                        <li><a href="#"><i class="display-flex-center zmdi zmdi-facebook"></i></a></li>
-                        <li><a href="#"><i class="display-flex-center zmdi zmdi-twitter"></i></a></li>
-                        <li><a href="#"><i class="display-flex-center zmdi zmdi-google"></i></a></li>
-                    </ul>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="bb-login-contact" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
+                    <form asp-action="Login">
+                        <div class="bb-login-wrap">
+                            <label for="email">Email*</label>
+                            <input type="email" placeholder="Enter Your Email" asp-for="UsernameOrEmail">
+                        </div>
+                        <div class="bb-login-wrap">
+                            <label for="email">Password*</label>
+                            <input asp-for="Password" type="password" placeholder="Enter Your Password">
+                        </div>
+                        <div class="bb-login-wrap">
+                            <a class="nav-link text-dark text-decoration-underline" asp-area="" asp-controller="Account" asp-action="ForgotPassword">Forgot Password</a>
+                        </div>
+                        <div class="bb-login-button">
+                            <button class="bb-btn-2" type="submit" value="Login">Login</button>
+                            <a class="nav-link text-dark text-decoration-underline" asp-area="" asp-controller="Account" asp-action="Register">Create an account</a>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
