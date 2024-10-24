@@ -1,0 +1,31 @@
+﻿/* Điều chỉnh khoảng cách giữa navbar và content */
+.navbar {
+    margin-bottom: 0;
+    height: 10px; /* Hoặc chiều cao phù hợp */
+}
+
+/* Điều chỉnh content-wrapper */
+.content-wrapper {
+    padding-top: 0px; /* Giảm padding phía trên */
+    margin-top: 0;
+}
+
+/* Điều chỉnh page-body-wrapper */
+.page-body-wrapper {
+    padding-top: 0;
+}
+
+/* Điều chỉnh home-tab */
+.home-tab {
+    margin-top: 0;
+}
+
+/* Điều chỉnh tab-content */
+.tab-content-basic {
+    margin-top: 10px; /* Giảm margin nếu cần */
+}
+
+/* Điều chỉnh các row trong content */
+.content-wrapper .row {
+    margin-top: 10px; /* Điều chỉnh khoảng cách giữa các hàng */
+}

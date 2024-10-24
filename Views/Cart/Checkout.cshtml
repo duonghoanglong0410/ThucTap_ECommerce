@@ -1,0 +1,382 @@
+﻿@model IEnumerable<TT_ECommerce.Models.EF.TbOrder>
+@{
+    ViewData["Title"] = "Checkout";
+   Layout = "~/Views/Shared/_LayoutUser.cshtml";
+    decimal totalAmount = 0;
+    decimal ship = 35000;
+}
+
+<!-- Breadcrumb -->
+<section class="section-breadcrumb margin-b-50">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="row bb-breadcrumb-inner">
+                    <div class="col-md-6 col-sm-12">
+                        <h2 class="bb-breadcrumb-title">Checkout</h2>
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <ul class="bb-breadcrumb-list">
+                            <li class="bb-breadcrumb-item"><a href="index-2.html">Home</a></li>
+                            <li><i class="ri-arrow-right-double-fill"></i></li>
+                            <li class="bb-breadcrumb-item active">Checkout</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- checkout -->
+<section class="section-checkout padding-tb-50">
+    <div class="container">
+        <div class="row mb-minus-24">
+            <div class="col-lg-4 col-12 mb-24">
+                <div class="bb-checkout-sidebar">
+                    <div class="checkout-items" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+                        <div class="sub-title">
+                            <h4>summary</h4>
+                        </div>
+                        <div class="checkout-summary">
+                            <ul>
+                                <li><span class="left-item">sub-total</span><span>@(totalAmount.ToString("C"))</span></li>
+                                <li><span class="left-item">Delivery Charges</span><span>@(totalAmount.ToString("C"))</span></li>
+                                <li>
+                                    <span class="left-item">Coupon Discount</span>
+                                    <span><a href="javascript:void(0)" class="apply drop-coupon">Apply Coupon</a></span>
+                                </li>
+                                <li>
+                                    <div class="coupon-down-box">
+                                        <form method="post">
+                                            <input class="bb-coupon" type="text" placeholder="Enter Your coupon Code" name="bb-coupon" required>
+                                            <button class="bb-btn-2" type="submit">Apply</button>
+                                        </form>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="bb-checkout-pro">
+                           
+                            @foreach (var order in Model)
+                            {
+                                var orderDetail = order.TbOrderDetails.FirstOrDefault();
+                                if (orderDetail != null)
+                                {
+                                    <div class="pro-items">
+                                        <div class="image">
+                                            <img src="assets/img/new-product/1.jpg" alt="new-product-1">
+                                        </div>
+                                        <div class="items-contact">
+                                            <h4><a href="javascript:void(0)">@orderDetail.Product.Title</a></h4>
+                                            <span class="bb-pro-rating">
+                                                <i class="ri-star-fill"></i>
+                                                <i class="ri-star-fill"></i>
+                                                <i class="ri-star-fill"></i>
+                                                <i class="ri-star-fill"></i>
+                                                <i class="ri-star-line"></i>
+                                            </span>
+                                            <div class="inner-price">
+                                                <span class="new-price">@orderDetail.Product.Price.ToString("C")</span>
+                                                <span class="old-price">$22</span>
+                                            </div>
+                                            <div class="bb-pro-variation">
+                                                <ul>
+                                                    <li class="active">
+                                                        <a href="javascript:void(0)" class="bb-opt-sz"
+                                                           data-tooltip="Small">250g</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="javascript:void(0)" class="bb-opt-sz"
+                                                           data-tooltip="Medium">500g</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="javascript:void(0)" class="bb-opt-sz"
+                                                           data-tooltip="Large">1kg</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    totalAmount += order.TotalAmount;
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div class="checkout-items" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
+                        <div class="sub-title">
+                            <h4>Delivery Method</h4>
+                        </div>
+                        <div class="checkout-method">
+                            <span class="details">
+                                Please select the preferred shipping method to use on this
+                                order.
+                            </span>
+                            <div class="bb-del-option">
+                                <div class="inner-del">
+                                    <span class="bb-del-head">Free Shipping</span>
+                                    <div class="radio-itens">
+                                        <input type="radio" id="rate1" name="rate" checked>
+                                        <label for="rate1">Rate - $0 .00</label>
+                                    </div>
+                                </div>
+                                <div class="inner-del">
+                                    <span class="bb-del-head">Flat Rate</span>
+                                    <div class="radio-itens">
+                                        <input type="radio" id="rate2" name="rate">
+                                        <label for="rate2">Rate - $5.00</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="about-order">
+                            <h5>Add Comments About Your Order</h5>
+                            <textarea name="your-commemt" placeholder="Comments"></textarea>
+                        </div>
+                    </div>
+                    <div class="checkout-items" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600">
+                        <div class="sub-title">
+                            <h4>Payment Method</h4>
+                        </div>
+                        <div class="checkout-method">
+                            <span class="details">
+                                Please select the preferred shipping method to use on this
+                                order.
+                            </span>
+                            <div class="bb-del-option">
+                                <div class="inner-del">
+                                    <div class="radio-itens">
+                                        <input type="radio" id="Cash1" name="radio-itens">
+                                        <label for="Cash1">Cash On Delivery</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="about-order">
+                            <h5>Add Comments About Your Order</h5>
+                            <textarea name="your-commemt" placeholder="Comments"></textarea>
+                        </div>
+                    </div>
+                    <div class="checkout-items" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="800">
+                        <div class="sub-title">
+                            <h4>Payment Method</h4>
+                        </div>
+                        <div class="payment-img">
+                            <img src="assets/img/payment/payment.png" alt="payment">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8 col-12 mb-24">
+                <div class="bb-checkout-contact" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
+                    <div class="main-title">
+                        <h4>New Customer</h4>
+                    </div>
+                    <label class="inner-title">Checkout Options</label>
+                    <div class="checkout-radio">
+                        <div class="radio-itens">
+                            <input type="radio" id="del1" name="account" checked>
+                            <label for="del1">Register Account</label>
+                        </div>
+                        <div class="radio-itens">
+                            <input type="radio" id="del2" name="account">
+                            <label for="del2">Guest Account</label>
+                        </div>
+                    </div>
+                   
+                    <p>
+                        By creating an account you will be able to shop faster, be up to date on an order's status,
+                        and keep track of the orders you have previously made.
+                    </p>
+                    <div class="inner-button">
+                        <a href="javascript:void(0)" class="bb-btn-2">Continue</a>
+                    </div>
+                    <div class="main-title">
+                        <h4>Returning Customer</h4>
+                    </div>
+                    <form method="post">
+                        <div class="input-item">
+                            <label>Email Address</label>
+                            <input type="text" name="name" placeholder="Enter your email address" required>
+                        </div>
+                        <div class="input-item">
+                            <label>Password</label>
+                            <input type="password" name="password" placeholder="Enter your password" required>
+                        </div>
+                        <div class="input-button">
+                            <button type="button" class="bb-btn-2">Login</button>
+                        </div>
+                    </form>
+                    <div class="main-title">
+                        <h4>Billing Details</h4>
+                    </div>
+                    <div class="checkout-radio">
+                        <div class="radio-itens">
+                            <input type="radio" id="address1" name="address" checked>
+                            <label for="address1">I want to use an existing address</label>
+                        </div>
+                        <div class="radio-itens">
+                            <input type="radio" id="address2" name="address">
+                            <label for="address2">I want to use new address</label>
+                        </div>
+                    </div>
+
+                    <div class="checkout-radio">
+                        <div class="radio-itens">
+                            <input type="radio" id="payment1" name="payment" checked>
+                            <label for="payment1">Direct Bank Transfer</label>
+                        </div>
+                        <div class="radio-itens">
+                            <input type="radio" id="payment2" name="payment">
+                            <label for="payment2">Check Payments</label>
+                        </div>
+                        <div class="radio-itens">
+                            <input type="radio" id="payment3" name="payment">
+                            <label for="payment3">Cash On Delivery</label>
+                        </div>
+                        <div class="radio-itens">
+                            <input type="radio" id="payment4" name="payment">
+                            <label for="payment4">Paypal</label>
+                        </div>
+                        <div class="radio-itens">
+                            <input type="radio" id="payment5" name="payment">
+                            <label for="payment5">Shipping</label>
+                        </div>
+                    </div>
+
+                    <div class="checkout-radio">
+                        <div class="radio-itens">
+                            <input type="radio" id="shipping1" name="shipping" checked>
+                            <label for="shipping1">Free Shipping</label>
+                        </div>
+                        <div class="radio-itens">
+                            <input type="radio" id="shipping2" name="shipping">
+                            <label for="shipping2">Flat rate: $15.00</label>
+                        </div>
+                        <div class="radio-itens">
+                            <input type="radio" id="shipping3" name="shipping">
+                            <label for="shipping3">Local Pickup: $8.00</label>
+                        </div>
+                    </div>
+
+                   
+                    <div class="input-box-form">
+                        <form method="post">
+                            <div class="row">
+                                <div class="col-lg-6 col-12">
+                                    <div class="input-item">
+                                        <label>First Name *</label>
+                                        <input type="text" name="name" placeholder="Enter your First Name" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-12">
+                                    <div class="input-item">
+                                        <label>Last Name *</label>
+                                        <input type="text" name="name" placeholder="Enter your Last Name" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-12">
+                                    <div class="input-item">
+                                        <label>Company Name *</label>
+                                        <input type="text" name="name" placeholder="Enter your First Name" required>
+                                    </div>
+                                </div>
+                               
+
+                                <div class="col-12">
+                                    <div class="input-item">
+                                        <label>Address *</label>
+                                        <input type="text" name="name" placeholder="Address Line 1" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-12">
+                                    <div class="input-item">
+                                        <label>Post Code *</label>
+                                        <input type="text" name="name" placeholder="Post Code" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-12">
+                                    <div class="input-item">
+                                        <label>Country *</label>
+                                        <input type="text" name="name" placeholder="Country" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-12">
+                                    <div class="input-item">
+                                        <label>Region State *</label>
+                                         <input type="text" name="name" placeholder="Region State" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-12">
+                                    <div class="input-item">
+                                        <label>Mobile *</label>
+                                        <input type="text" name="name" placeholder="Enter your First Name" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-12">
+                                    <div class="input-item">
+                                        <label>Email Address *</label>
+                                        <input type="text" name="name" placeholder="Enter your Last Name" required>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="input-item"> 
+                                         <label>Note </label>
+                                        <input type="text" name="name" placeholder="Oreder Notes (Optional)" required>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="input-button">
+                                        <button type="button" class="bb-btn-2">Place Order</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script>
+    document.getElementById('placeOrderBtn').addEventListener('click', function () {
+        // Gọi tới API để lấy URL thanh toán
+       
+        var amount = "@((long)((totalAmount + ship))*100)";  //Giá trị amount mẫu, lấy từ context thực tế
+        var infor = '@Model.FirstOrDefault()?.Email';  // Thông tin thanh toán mẫu
+        // Lấy ngày giờ hiện tại
+        var now = new Date();
+        var year = now.getFullYear();
+        var month = (now.getMonth() + 1).toString().padStart(2, '0'); // Tháng 0-indexed nên cần +1
+        var day = now.getDate().toString().padStart(2, '0');
+        var hours = now.getHours().toString().padStart(2, '0');
+        var minutes = now.getMinutes().toString().padStart(2, '0');
+        var seconds = now.getSeconds().toString().padStart(2, '0');
+
+        // Tạo mã hóa đơn dựa trên ngày giờ (yyyymmddHHMMSS)
+        var orderinfor = year + month + day + hours + minutes + seconds;
+
+        var url = `/VNPayAPI/${amount}&${infor}&${orderinfor}`;
+
+        fetch(url, {
+            method: 'GET',
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.error('@@data:', data);
+                if (data.url) {
+                    // Đóng tab hiện tại
+                    //window.close();
+                    // Mở tab mới với URL trả về từ máy chủ
+                    //window.open(data.url, '_blank');
+                    window.location.href = data.url;
+                }
+            })
+            .catch(error => {
+                console.error('Có lỗi xảy ra:', error);
+            });
+    });
+</script>
+<!-- Checkout Page End -->

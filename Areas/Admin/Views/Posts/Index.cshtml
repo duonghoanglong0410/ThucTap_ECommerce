@@ -1,0 +1,72 @@
+﻿@model IEnumerable<TT_ECommerce.Models.EF.TbPost>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Bài Viết";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex align-items-center">
+                    <h4 class="card-title">Danh Sách Bài Viết</h4>
+                    <a asp-action="CreatePost" style="padding :10px">
+                        <button class="btn btn-primary btn-round ms-auto" data-bs-toggle="modal" data-bs-target="#addRowModal">
+                            <i class="fa fa-plus"></i>
+                            Thêm
+                        </button>
+                    </a>
+                    <p>@TempData["Message"]</p>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="add-row" class="display table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Description</th>
+                                <th>Seo Title</th>
+                                <th>Seo Description</th>
+                                <th>Keywords</th>
+                                <th>Created By</th>
+                                <th>Created Date</th>
+                                <th>Modified Date</th>
+                                <th>Modified By</th>
+                                <th style="width: 10%">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var post in Model)
+                            {
+                                <tr>
+                                    <td>@post.Title</td>
+                                    <td>@post.Description</td>
+                                    <td>@post.SeoTitle</td>
+                                    <td>@post.SeoDescription</td>
+                                    <td>@post.SeoKeywords</td>
+                                    <td>@post.CreatedBy</td>
+                                    <td>@post.CreatedDate.ToString("g")</td>
+                                    <td>@post.ModifiedDate.ToString("g")</td>
+                                    <td>@post.Modifiedby</td>
+                                    <td>
+                                        <a asp-action="EditPost" asp-route-id="@post.Id" class="btn btn-warning" style="padding:5px; margin-right: 5px;">
+                                            <i class="fa fa-edit"></i> Sửa
+                                        </a>
+
+                                        <form asp-action="Delete" asp-route-id="@post.Id" method="post" style="display:inline-block;">
+                                            <button type="submit" class="btn btn-danger" style="padding:5px;">
+                                                <i class="fa fa-trash"></i> Xóa
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

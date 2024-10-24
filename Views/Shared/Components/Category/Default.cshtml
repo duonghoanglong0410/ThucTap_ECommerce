@@ -1,0 +1,8 @@
+﻿ @model IEnumerable<TT_ECommerce.Models.EF.TbProductCategory>
+
+<select id="categories" name="categoryId" onchange="this.form.submit()">
+    @foreach (var category in Model)
+    {
+        <option value="@category.Id">@category.Title</option>
+    }
+</select>

@@ -1,0 +1,46 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model IEnumerable<TT_ECommerce.Areas.Admin.Models.UserRoleViewModel> // Sử dụng ViewModel đã tạo
+
+@{
+    ViewBag.Title = "Danh sách người dùng";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Danh sách người dùng</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Tên người dùng</th>
+            <th>Email</th>
+            <th>Vai trò</th> <!-- Thêm cột để hiển thị vai trò -->
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>
+                    @if (user.Roles.Any())
+                    {
+                        <span>@string.Join(", ", user.Roles)</span> <!-- Hiển thị danh sách vai trò -->
+                    }
+                    else
+                    {
+                        <span>Chưa có vai trò</span>
+                    }
+                </td>
+                <td>
+                    <a href="@Url.Action("EditUser", "UserManager", new {  userId = user.Id })" class="btn btn-primary">Chỉnh sửa</a>
+
+                    <a href="@Url.Action("AssignRole", "UserManager", new { userId = user.Id })" class="btn btn-info">Gán vai trò</a>
+                    <a href="@Url.Action("ConfirmDeleteUser", "UserManager", new { userId = user.Id })" class="btn btn-danger"> Xóa người dùng</a>
+                    
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

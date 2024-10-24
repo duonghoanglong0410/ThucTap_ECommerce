@@ -1,0 +1,70 @@
+﻿  @model IEnumerable<TT_ECommerce.Models.EF.TbProductCategory>
+
+   <!-- Category -->
+<section class="section-category padding-tb-50">
+    <div class="container">
+        <div class="row mb-minus-24">
+            <div class="col-lg-5 col-12 mb-24">
+                <div class="bb-category-img">
+                    <img src="~/user/assets/img/category/category.jpg" alt="category">
+                    <div class="bb-offers">
+                        <span>50% Off</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-7 col-12 mb-24">
+                <div class="bb-category-contact">
+                    <div class="category-title" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600">
+                        <h2>Explore Categories</h2>
+                    </div>
+                    <div class="bb-category-block owl-carousel">
+                        @foreach (var category in Model)
+                          {                                          
+                            <div class="bb-category-box category-items-1" data-aos="flip-left" data-aos-duration="1000"
+                                 data-aos-delay="200">
+                                <div class="category-image">
+                                    <img src="~/user/assets/img/category/1.svg" alt="category">
+                                </div>
+                                <div class="category-sub-contact">
+                                    <h5><a href="shop-left-sidebar-col-3.html">@category.Title</a></h5>
+                                </div>
+                            </div>
+                        }
+                        <!--
+                        <div class="bb-category-box category-items-2" data-aos="flip-left" data-aos-duration="1000"
+                             data-aos-delay="400">
+                            <div class="category-image">
+                                <img src="assets/img/category/2.svg" alt="category">
+                            </div>
+                            <div class="category-sub-contact">
+                                <h5><a href="shop-left-sidebar-col-3.html">Fruits</a></h5>
+                                <p>291 items</p>
+                            </div>
+                        </div>
+                        <div class="bb-category-box category-items-3" data-aos="flip-left" data-aos-duration="1000"
+                             data-aos-delay="600">
+                            <div class="category-image">
+                                <img src="assets/img/category/3.svg" alt="category">
+                            </div>
+                            <div class="category-sub-contact">
+                                <h5><a href="shop-left-sidebar-col-3.html">Cold Drinks</a></h5>
+                                <p>49 items</p>
+                            </div>
+                        </div>
+                        <div class="bb-category-box category-items-4" data-aos="flip-left" data-aos-duration="1000"
+                             data-aos-delay="800">
+                            <div class="category-image">
+                                <img src="assets/img/category/4.svg" alt="category">
+                            </div>
+                            <div class="category-sub-contact">
+                                <h5><a href="shop-left-sidebar-col-3.html">Bakery</a></h5>
+                                <p>08 items</p>
+                            </div>
+                        </div>
+                        -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

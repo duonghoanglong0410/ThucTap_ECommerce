@@ -1,0 +1,45 @@
+﻿@model TT_ECommerce.Areas.Admin.Models.AssignRoleViewModel
+
+@{
+    ViewBag.Title = "Gán vai trò cho người dùng";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Gán vai trò cho @Model.UserName</h2>
+
+<!-- Hiển thị thông báo lỗi nếu có -->
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+
+<form asp-action="AssignRole" method="post">
+    <input type="hidden" name="userId" value="@Model.UserId" />
+
+    <div class="form-group">
+        <h4>Chọn vai trò:</h4>
+        @foreach (var role in Model.Roles)
+        {
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="selectedRoles"
+                       value="@role.RoleName"
+                @(Model.SelectedRoles.Contains(role.RoleName) ? "checked" : "") />
+                <label class="form-check-label">
+                    @role.RoleName
+                </label>
+            </div>
+        }
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Gán vai trò</button>
+        <a href="@Url.Action("Index", "UserManager")" class="btn btn-secondary">Quay lại</a>
+    </div>
+</form>

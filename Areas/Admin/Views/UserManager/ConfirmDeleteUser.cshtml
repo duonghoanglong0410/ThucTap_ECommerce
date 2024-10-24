@@ -1,0 +1,19 @@
+﻿@model TT_ECommerce.Areas.Admin.Models.DeleteUserViewModel
+
+@{
+    ViewBag.Title = "Xác nhận xóa người dùng";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Xác nhận xóa người dùng</h2>
+
+<div class="alert alert-warning">
+    <p>Bạn có chắc chắn muốn xóa người dùng <strong>@Model.UserName</strong> (Email: @Model.Email)?</p>
+</div>
+
+<form method="post" asp-action="DeleteUser">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="UserId" value="@Model.UserId" />
+    <button type="submit" class="btn btn-danger">Xác nhận xóa</button>
+    <a href="@Url.Action("Index", "UserManager")" class="btn btn-secondary">Hủy</a>
+</form>

@@ -1,0 +1,176 @@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Kaiadmin - Bootstrap 5 Admin Dashboard</title>
+    <link rel="icon" href="~/Layoutadmin/assets/img/kaiadmin/favicon.ico" type="image/x-icon">
+
+    <!-- External CSS -->
+ 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Local CSS -->
+    <link rel="stylesheet" href="~/Layoutadmin/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/Layoutadmin/assets/css/plugins.min.css">
+    <link rel="stylesheet" href="~/Layoutadmin/assets/css/kaiadmin.min.css">
+    <link rel="stylesheet" href="~/Layoutadmin/assets/css/demo.css">
+
+    <!-- WebFont Loading -->
+    <script src="~/Layoutadmin/assets/js/plugin/webfont/webfont.min.js"></script>
+    <script>
+        WebFont.load({
+            google: { families: ["Public Sans:300,400,500,600,700"] },
+            custom: {
+                families: [
+                    "Font Awesome 5 Solid",
+                    "Font Awesome 5 Regular",
+                    "Font Awesome 5 Brands",
+                    "simple-line-icons"
+                ],
+                urls: ["/Layoutadmin/assets/css/fonts.min.css"]
+            },
+            active: function () {
+                sessionStorage.fonts = true;
+            }
+        });
+    </script>
+
+    <style>
+        .main-panel {
+            height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    @if (IsSectionDefined("naviheader"))
+    {
+        @RenderSection("naviheader", required: false)
+    }
+
+    <div class="wrapper">
+        @await Html.PartialAsync("Sidebar")
+        <div class="main-panel">
+            <div class="main-header">
+                <div class="main-header-logo">
+                    <div class="logo-header" data-background-color="dark">
+                        <a href="index.html" class="logo">
+                            <img src="~/Layoutadmin/assets/img/kaiadmin/logo_light.svg" alt="navbar brand" class="navbar-brand" height="20">
+                        </a>
+                        <div class="nav-toggle">
+                            <button class="btn btn-toggle toggle-sidebar">
+                                <i class="gg-menu-right"></i>
+                            </button>
+                            <button class="btn btn-toggle sidenav-toggler">
+                                <i class="gg-menu-left"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                @await Html.PartialAsync("NavbarHeader")
+            </div>
+
+            <div class="container">
+                <div class="page-inner">
+                    @RenderBody()
+                </div>
+            </div>
+
+            @await Html.PartialAsync("Footer")
+        </div>
+    </div>
+
+    <!-- Core JS Files -->
+   
+    <script src="~/Layoutadmin/assets/js/core/jquery-3.7.1.min.js"></script>
+    <script src="~/Layoutadmin/assets/js/core/popper.min.js"></script>
+    <script src="~/Layoutadmin/assets/js/core/bootstrap.min.js"></script>
+
+    <!-- Plugin JS Files -->
+    <script src="~/Layoutadmin/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+    <script src="~/Layoutadmin/assets/js/plugin/chart.js/chart.min.js"></script>
+    <script src="~/Layoutadmin/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
+    <script src="~/Layoutadmin/assets/js/plugin/chart-circle/circles.min.js"></script>
+    <script src="~/Layoutadmin/assets/js/plugin/datatables/datatables.min.js"></script>
+    <script src="~/Layoutadmin/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
+    <!-- <script src="~/Layoutadmin/assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>-->
+    <!--  <script src="~/Layoutadmin/assets/js/plugin/jsvectormap/world.js"></script>-->
+    <script src="~/Layoutadmin/assets/js/plugin/sweetalert/sweetalert.min.js"></script>
+
+    <!-- Kaiadmin JS -->
+    <script src="~/Layoutadmin/assets/js/kaiadmin.min.js"></script>
+    <script src="~/Layoutadmin/assets/js/setting-demo.js"></script>
+    <!--  <script src="~/Layoutadmin/assets/js/demo.js"></script>-->
+
+    <!-- TinyMCE -->
+    <script src="https://cdn.tiny.cloud/1/c9rxqgzp2h7f8cowlr7bfn77rprk5htl4dgx6w14wn9qz3zu/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            plugins: [
+                'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
+                'checklist', 'mediaembed', 'casechange', 'export', 'formatpainter', 'pageembed', 'a11ychecker', 'tinymcespellchecker', 'permanentpen', 'powerpaste', 'advtable', 'advcode', 'editimage', 'advtemplate', 'ai', 'mentions', 'tinycomments', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown'
+            ],
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+            tinycomments_mode: 'embedded',
+            tinycomments_author: 'Author name',
+            mergetags_list: [
+                { value: 'First.Name', title: 'First Name' },
+                { value: 'Email', title: 'Email' }
+            ],
+            ai_request: (request, respondWith) => respondWith.string(() => Promise.reject('See docs to implement AI Assistant'))
+        });
+    </script>
+
+    <!-- Additional Scripts -->
+    <script>
+        $("#lineChart").sparkline([102, 109, 120, 99, 110, 105, 115], {
+            type: "line",
+            height: "70",
+            width: "100%",
+            lineWidth: "2",
+            lineColor: "#177dff",
+            fillColor: "rgba(23, 125, 255, 0.14)"
+        });
+
+        $("#lineChart2").sparkline([99, 125, 122, 105, 110, 124, 115], {
+            type: "line",
+            height: "70",
+            width: "100%",
+            lineWidth: "2",
+            lineColor: "#f3545d",
+            fillColor: "rgba(243, 84, 93, .14)"
+        });
+
+        $("#lineChart3").sparkline([105, 103, 123, 100, 95, 105, 115], {
+            type: "line",
+            height: "70",
+            width: "100%",
+            lineWidth: "2",
+            lineColor: "#ffa534",
+            fillColor: "rgba(255, 165, 52, .14)"
+        });
+    </script>
+
+    <script>
+        function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function () {
+                var output = document.getElementById('preview');
+                output.src = reader.result;
+                output.style.display = 'block';
+            };
+            if (event.target.files && event.target.files[0]) {
+                reader.readAsDataURL(event.target.files[0]);
+            }
+        }
+    </script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

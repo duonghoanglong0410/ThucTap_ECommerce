@@ -1,0 +1,51 @@
+﻿@model TT_ECommerce.Models.EF.TbPost
+
+<!-- Start Hero Section -->
+<div class="hero">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-lg-5">
+                <div class="intro-excerpt">
+                    <h1>Blog</h1>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <!-- Có thể thêm nội dung khác ở đây nếu cần -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Hero Section -->
+<!-- single post -->
+<div class="mt-150 mb-150">
+    <div class="container">
+        <div class="row">
+            @if (Model != null)
+            {
+                <div class="col-lg-8">
+                    <div class="single-article-section">
+                        <div class="single-article-text">
+                            @if (!string.IsNullOrEmpty(Model.Image))
+                            {
+                                <div class="single-article-bg" style="background-image: url('@Model.Image');"></div>
+                            }
+                            <p class="blog-meta">
+                                <span class="author"><i class="fas fa-user"></i> @Model.CreatedBy</span>
+                                <span class="date"><i class="fas fa-calendar"></i> @Model.CreatedDate.ToString("dd/MM/yyyy")</span>
+                            </p>
+                            <h2>@Model.Title</h2>
+                            <p>@Html.Raw(Model.Detail)</p>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="col-lg-8">
+                    <p>Không tìm thấy bài viết.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<!-- end single post -->

@@ -1,0 +1,30 @@
+﻿@model IEnumerable<TT_ECommerce.Models.EF.TbOrderDetail>
+
+@if (Model != null && Model.Any())
+{
+    int i = 1;
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Tên sản phẩm</th>
+                <th>Giá</th>
+                <th>Số lượng</th>
+                <th>Thành tiền</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@i</td>
+                    <td>@(item.Product != null ? @item.Product.Title : "Sản phẩm không tồn tại")</td>
+                    <td>@item.Price</td>
+                    <td>@item.Quantity</td>
+                    <td>@TT_ECommerce.Common.Common.FormatNumber((item.Price * item.Quantity), 0)</td>
+                </tr>
+                i++;
+            }
+        </tbody>
+    </table>
+}

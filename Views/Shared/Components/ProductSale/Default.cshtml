@@ -1,0 +1,98 @@
+﻿@model List<TT_ECommerce.Models.EF.TbProduct>
+
+<!-- Best Seller -->
+<section class="section-deal padding-tb-50">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="section-title bb-deal" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+                    <div class="section-detail">
+                        <h2 class="bb-title">Những sản phẩm bán <span>đang có ưu đãi khủng.</span></h2>
+                    </div>
+                    <div id="dealend" class="dealend-timer"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loop through products and display 3 per row -->
+        <div class="row">
+            @for (var i = 0; i < Model.Count; i += 3)
+            {
+                <div class="row mb-4">
+                    @for (var j = i; j < i + 3 && j < Model.Count; j++)
+                    {
+                        var product = Model[j];
+                        <div class="col-md-4">
+                            <div class="bb-pro-box">
+                                <div class="bb-pro-img">
+                                    <span class="flags">
+                                        <span>Sale</span>
+                                    </span>
+                                    <a href="javascript:void(0)">
+                                        <div class="inner-img">
+                                            <img width="260px" height="260px" class="main-img" src="@Url.Content(product.Image)" alt="@product.Title">
+                                            <img width="260px" height="260px" class="hover-img" src="@Url.Content(product.Image)" alt="@product.Title">
+                                        </div>
+                                    </a>
+                                    <ul class="bb-pro-actions">
+                                        <li class="bb-btn-group">
+                                            <a href="javascript:void(0)" title="Wishlist">
+                                                <i class="ri-heart-line"></i>
+                                            </a>
+                                        </li>
+                                        <li class="bb-btn-group">
+                                            <a href="javascript:void(0)" data-link-action="quickview"
+                                               title="Quick View" data-bs-toggle="modal"
+                                               data-bs-target="#bry_quickview_modal">
+                                                <i class="ri-eye-line"></i>
+                                            </a>
+                                        </li>
+                                        <li class="bb-btn-group">
+                                            <a href="compare.html" title="Compare">
+                                                <i class="ri-repeat-line"></i>
+                                            </a>
+                                        </li>
+                                        <li class="bb-btn-group">
+                                            <a href="javascript:void(0)" title="Add To Cart">
+                                                <i class="ri-shopping-bag-4-line"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="bb-pro-contact">
+                                    <div class="bb-pro-subtitle">
+                                        <a href="@Url.Action("Index", "ProductDetails", new { id = product.Id })">@product.ProductCategory.Title</a>
+                                        <span class="bb-pro-rating">
+                                            <i class="ri-star-fill"></i>
+                                            <i class="ri-star-fill"></i>
+                                            <i class="ri-star-fill"></i>
+                                            <i class="ri-star-fill"></i>
+                                            <i class="ri-star-line"></i>
+                                        </span>
+                                    </div>
+                                    <h4 class="bb-pro-title">
+                                        <a href="@Url.Action("Index", "ProductDetails", new { id = product.Id })">@product.Title</a>
+                                    </h4>
+                                    <div class="bb-price">
+                                        <div class="inner-price">
+                                            @if (product.PriceSale > 0)
+                                            {
+                                                <span class="new-price">@product.PriceSale</span>
+                                                <span class="old-price" style="text-decoration: line-through;">@product.Price</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="old-price">@product.Price</span>
+                                            }
+                                        </div>
+                                        <span class="last-items">1 sản phẩm</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</section>

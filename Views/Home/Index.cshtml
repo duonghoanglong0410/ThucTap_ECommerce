@@ -1,0 +1,21 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<!--Slider-->
+@Html.Partial("~/Views/Shared/Partials/_Slider.cshtml")
+
+<!--Best Seller -->
+@await Component.InvokeAsync("ProductSale", new { topCount = 10 })
+
+<!--Banner-->
+@Html.Partial("~/Views/Shared/Partials/_Banner.cshtml")
+
+<!--New Product-->
+@await Component.InvokeAsync("NewProducts")
+
+<!--Services-->
+@Html.Partial("~/Views/Shared/Partials/_Services.cshtml")
+
+<!--Posts-->
+@await Component.InvokeAsync("Posts")
+

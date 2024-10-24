@@ -1,0 +1,47 @@
+﻿@model TT_ECommerce.Areas.Admin.Models.EditUserViewModel
+@{
+    ViewBag.Title = "Chỉnh sửa thông tin người dùng";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+<form method="post" asp-action="EditUser">
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" name="UserId" value="@Model.UserId" />
+
+    <!-- Tên tài khoản -->
+    <div class="form-group">
+        <label for="UserName">Tên tài khoản</label>
+        <input id="UserName" name="UserName" class="form-control" value="@Model.UserName" placeholder="Nhập tên tài khoản" />
+        <span class="text-danger">@Html.ValidationMessage("UserName")</span>
+    </div>
+
+    <!-- Email -->
+    <div class="form-group">
+        <label for="Email">Email</label>
+        <input id="Email" name="Email" class="form-control" type="email" value="@Model.Email" placeholder="Nhập địa chỉ email" />
+        <span class="text-danger">@Html.ValidationMessage("Email")</span>
+    </div>
+
+    <!-- Số điện thoại -->
+    <div class="form-group">
+        <label for="PhoneNumber">Số điện thoại</label>
+        <input id="PhoneNumber" name="PhoneNumber" class="form-control" type="tel" value="@Model.PhoneNumber" placeholder="Nhập số điện thoại" />
+        <span class="text-danger">@Html.ValidationMessage("PhoneNumber")</span>
+    </div>
+
+    <!-- Mật khẩu -->
+    <div class="form-group">
+        <label for="Password">Mật khẩu mới (nếu muốn thay đổi)</label>
+        <input id="Password" name="Password" class="form-control" type="password" placeholder="Nhập mật khẩu mới" />
+        <span class="text-danger">@Html.ValidationMessage("Password")</span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Lưu</button>
+    <a href="@Url.Action("Index", "UserManager")" class="btn btn-secondary">Quay lại</a>
+
+</form>
+
