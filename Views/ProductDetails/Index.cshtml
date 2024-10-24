@@ -2,6 +2,12 @@
 @{
     ViewData["Title"] = "Index";
 }
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
 <!-- Breadcrumb -->
 <section class="section-breadcrumb margin-b-50">
     <div class="container">
@@ -90,27 +96,24 @@
                                     </div>
                                 </div>
 
+                                <!-- Form thêm vào giỏ hàng -->
                                 <div class="bb-single-qty">
-                                    <div class="qty-plus-minus">
-                                        <input class="qty-input" type="text" name="bb-qtybtn" value="1">
-                                    </div>
-                                    <div class="buttons">
-                                        <a asp-area="" asp-controller="Cart" asp-action="Index" class="bb-btn-2">View Cart</a>
-                                    </div>
-                                    <ul class="bb-pro-actions">
-                                        <li class="bb-btn-group">
-                                            <a href="javascript:void(0)">
-                                                <i class="ri-heart-line"></i>
-                                            </a>
-                                        </li>
-                                        <li class="bb-btn-group">
-                                            <a href="#" data-link-action="#" title="Quick view" data-bs-toggle="modal"
-                                               data-bs-target="#">
-                                                <i class="ri-eye-line"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
+                                    <form id="addToCartForm" method="post">
+                                        <div class="qty-plus-minus">
+                                            <input class="qty-input" type="number" name="quantity" value="1" min="1" />
+                                        </div>
+
+                                        <input type="hidden" name="productId" value="@Model.Id" />
+                                        <input type="hidden" name="typePayment" value="1" />
+
+                                        <div class="buttons">
+                                            <button type="submit" class="bb-btn-2">Add to Cart</button>
+                                        </div>
+                                    </form>
                                 </div>
+
+                             
+                              
                             </div>
                         </div>
                     </div>
@@ -141,3 +144,29 @@
         </div>
     </div>
 </section>
+@section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#addToCartForm').submit(function (event) {
+                event.preventDefault(); // Ngăn chặn form gửi theo cách thông thường
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("AddToCart", "ProductDetails")',
+                    data: $(this).serialize(), // Gửi dữ liệu của form
+                    success: function (response) {
+                        // Hiển thị thông báo thành công
+                        if (response.success) {
+                            $('<div class="alert alert-success">' + response.message + '</div>').appendTo('.bb-single-pro-contact').fadeIn().delay(3000).fadeOut();
+                        }
+                    },
+                    error: function (xhr) {
+                        // Hiển thị thông báo lỗi nếu có
+                        alert('An error occurred while adding the product to the cart.');
+                    }
+                });
+            });
+        });
+    </script>
+}

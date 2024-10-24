@@ -1,21 +1,21 @@
-﻿    using Microsoft.AspNetCore.Mvc;
-    using TT_ECommerce.Models; // Import namespace chứa model Product
-    using System.Linq;
-    using TT_ECommerce.Data;
-    using TT_ECommerce.Models.EF;
-    using System.Net;
+﻿using Microsoft.AspNetCore.Mvc;
+using TT_ECommerce.Models; // Import namespace chứa model Product
+using System.Linq;
+using TT_ECommerce.Data;
+using TT_ECommerce.Models.EF;
+using System.Net;
 using System.Security.Claims;
 
-    namespace TT_ECommerce.Controllers
+namespace TT_ECommerce.Controllers
+{
+    public class ProductDetailsController : Controller
     {
-        public class ProductDetailsController : Controller
-        {
-            private readonly TT_ECommerceDbContext _context; // ApplicationDbContext là DbContext của bạn
+        private readonly TT_ECommerceDbContext _context; // ApplicationDbContext là DbContext của bạn
 
-            public ProductDetailsController(TT_ECommerceDbContext context)
-            {
-                _context = context;
-            }
+        public ProductDetailsController(TT_ECommerceDbContext context)
+        {
+            _context = context;
+        }
 
         [HttpPost]
         public IActionResult AddToCart(int productId, int quantity, int typePayment)
@@ -24,85 +24,77 @@ using System.Security.Claims;
             {
                 return BadRequest("Quantity must be greater than 0");
             }
-         
 
-            // Tìm sản phẩm trong cơ sở dữ liệu
             var product = _context.TbProducts.Find(productId);
             if (product == null)
             {
                 return NotFound("Product not found");
             }
+
             if (!User.Identity.IsAuthenticated)
             {
-                return BadRequest("User is not logged in"); // Hoặc có thể chuyển hướng đến trang đăng nhập
-            }
-          
-                // Lấy thông tin người dùng từ Claims
-                var customerName = User.FindFirst(ClaimTypes.Name)?.Value; // Tên khách hàng
-                var phone = "Null"; // Số điện thoại, nếu có lưu trong Claims
-                var address = "Null"; // Địa chỉ, nếu có lưu trong Claims
-                var email = User.FindFirst(ClaimTypes.Email)?.Value; 
-          
-           
-            // Kiểm tra thông tin khách hàng
-            if (string.IsNullOrEmpty(customerName) || string.IsNullOrEmpty(email) /*|| string.IsNullOrEmpty(phone)*/ /*|| string.IsNullOrEmpty(address)*/)
-            {
-                return BadRequest("Customer Name or Email are required");
+                return RedirectToAction("Login", "Account"); // Chuyển hướng đến trang đăng nhập nếu chưa đăng nhập
             }
 
-            //// Tạo mã đơn hàng (có thể tuỳ chỉnh mã theo ý muốn)
+            // Lấy thông tin khách hàng từ Claims
+            var customerName = User.FindFirst(ClaimTypes.Name)?.Value;
+            var email = User.FindFirst(ClaimTypes.Email)?.Value;
+
+            if (string.IsNullOrEmpty(customerName) || string.IsNullOrEmpty(email))
+            {
+                return BadRequest("Customer information is required");
+            }
+
+            // Khởi tạo giá trị CreatedDate
+            var createdDate = DateTime.Now;
+
+            // Tạo mã đơn hàng
             var orderCode = "ORD-" + DateTime.Now.Ticks;
 
-            // Tạo đơn hàng mới
             var order = new TbOrder
             {
-                Code = orderCode, // Mã đơn hàng
+                Code = orderCode,
                 CustomerName = customerName,
-                Phone = phone,
-                Address = address,
-                TotalAmount = product.Price * quantity, // Tính tổng tiền dựa trên giá sản phẩm
-                Quantity = quantity,
                 Email = email,
+                Phone = "0123456789", // Tạm thời điền số điện thoại, nên thay bằng giá trị thực tế
+                Address = "123 Main St", // Tạm thời điền địa chỉ, nên thay bằng giá trị thực tế
+                TotalAmount = product.Price * quantity,
+                Quantity = quantity,
                 TypePayment = typePayment,
-                CreatedDate = DateTime.Now,
-                ModifiedDate = DateTime.Now,
-                Status = 0 // Đặt trạng thái mặc định, ví dụ 0 = 'Pending'
+                CreatedDate = createdDate, // Gán giá trị CreatedDate
+                ModifiedDate = createdDate, // Gán giá trị ModifiedDate
+                Status = 0
             };
 
-            // Thêm đơn hàng vào cơ sở dữ liệu
             _context.TbOrders.Add(order);
-            _context.SaveChanges(); // Lưu đơn hàng trước để có ID
+            _context.SaveChanges();
 
-            // Tạo chi tiết đơn hàng
             var orderDetail = new TbOrderDetail
             {
-                OrderId = order.Id, // ID của đơn hàng vừa tạo
-                ProductId = product.Id, // ID sản phẩm
-                Price = product.Price, // Giá sản phẩm
-                Quantity = quantity // Số lượng sản phẩm
+                OrderId = order.Id,
+                ProductId = product.Id,
+                Price = product.Price,
+                Quantity = quantity
             };
 
-            // Thêm chi tiết đơn hàng vào cơ sở dữ liệu
             _context.TbOrderDetails.Add(orderDetail);
-            _context.SaveChanges(); // Lưu chi tiết đơn hàng vào database
+            _context.SaveChanges();
 
-            TempData["SuccessMessage"] = "Sản phẩm đã được thêm vào giỏ hàng thành công!"; // Thêm thông báo thành công
-            return RedirectToAction("Index", new { id = productId }); // Chuyển hướng đến trang chi tiết sản phẩm
+         
+            return Json(new { success = true, message = "Product added to cart successfully!" });
         }
-
-
 
         public IActionResult Index(int id)
+        {
+            // Lấy sản phẩm theo id từ cơ sở dữ liệu
+            var product = _context.TbProducts.FirstOrDefault(p => p.Id == id);
+            if (product == null)
             {
-                // Lấy sản phẩm theo id từ cơ sở dữ liệu
-                var product = _context.TbProducts.FirstOrDefault(p => p.Id == id);
-                if (product == null)
-                {
-                    return NotFound();
-                }
-
-                // Truyền product vào view
-                return View(product);
+                return NotFound();
             }
+
+            // Truyền product vào view
+            return View(product);
         }
     }
+}
