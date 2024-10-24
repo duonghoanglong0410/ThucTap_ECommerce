@@ -1,51 +1,67 @@
 ﻿@model TT_ECommerce.Models.EF.TbPost
 
-<!-- Start Hero Section -->
-<div class="hero">
+
+<!-- Breadcrumb -->
+<section class="section-breadcrumb margin-b-50">
     <div class="container">
-        <div class="row justify-content-between">
-            <div class="col-lg-5">
-                <div class="intro-excerpt">
-                    <h1>Blog</h1>
+        <div class="row">
+            <div class="col-12">
+                <div class="row bb-breadcrumb-inner">
+                    <div class="col-md-6 col-sm-12">
+                        <h2 class="bb-breadcrumb-title">Blog</h2>
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <ul class="bb-breadcrumb-list">
+                            <li class="bb-breadcrumb-item"><a href="index-2.html">Home</a></li>
+                            <li><i class="ri-arrow-right-double-fill"></i></li>
+                            <li class="bb-breadcrumb-item active">Blog</li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-            <div class="col-lg-7">
-                <!-- Có thể thêm nội dung khác ở đây nếu cần -->
             </div>
         </div>
     </div>
-</div>
-<!-- End Hero Section -->
-<!-- single post -->
-<div class="mt-150 mb-150">
+</section>
+
+<!-- Blog-Detail -->
+<section class="section-blog-details padding-tb-50">
     <div class="container">
         <div class="row">
-            @if (Model != null)
-            {
-                <div class="col-lg-8">
-                    <div class="single-article-section">
-                        <div class="single-article-text">
-                            @if (!string.IsNullOrEmpty(Model.Image))
-                            {
-                                <div class="single-article-bg" style="background-image: url('@Model.Image');"></div>
-                            }
-                            <p class="blog-meta">
-                                <span class="author"><i class="fas fa-user"></i> @Model.CreatedBy</span>
-                                <span class="date"><i class="fas fa-calendar"></i> @Model.CreatedDate.ToString("dd/MM/yyyy")</span>
-                            </p>
-                            <h2>@Model.Title</h2>
-                            <p>@Html.Raw(Model.Detail)</p>
+            <div class="col-12">
+                <div class="bb-blog-details-contact" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
+                    <div class="inner-blog-details-image">
+                        <img src="@Url.Content(Model.Image)" alt="details-one">
+                    </div>
+                    <div class="inner-blog-details-contact">
+                        <span>@Model.CreatedBy</span>
+                        <span>@Model.CreatedDate</span>
+                        <h4 class="sub-title">@Model.Title</h4>
+                        <p>@Html.Raw(@Model.Detail)</p>
+                    </div>
+                    <div class="col-12">
+                        <div class="bb-pro-pagination">
+                            <p>Showing 1-12 of 21 item(s)</p>
+                            <ul>
+                                <li class="active">
+                                    <a href="javascript:void(0)">1</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">2</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">3</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)">4</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)" class="next">Next <i class="ri-arrow-right-s-line"></i></a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
-            }
-            else
-            {
-                <div class="col-lg-8">
-                    <p>Không tìm thấy bài viết.</p>
-                </div>
-            }
+            </div>
         </div>
     </div>
-</div>
-<!-- end single post -->
+</section>
