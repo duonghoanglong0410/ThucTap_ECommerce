@@ -71,30 +71,28 @@
 </section>
 <!-- /.content -->
 @section Scripts {
-    <script src="~/js/Chart.min.js"></script>
+    <script src="~/js/Chart.js"></script>
     <script src="~/js/moment.min.js"></script>
     <script>
         $(function () {
-            /* ChartJS
-             * -------
-             * Here we will create a few charts using ChartJS
-             */
-
             var arrDoanhThu = [];
             var arrLoiNhuan = [];
             var arrDate = [];
+
             $.ajax({
-                url: '@Url.Action("GetStatistical", "Statistical")', // Sử dụng Url.Action để lấy URL
-                type: 'GET',
+                url: '@Url.Action("GetStatistical", "Statistical", new { area = "Admin" })', // Kiểm tra xem có phải là chuỗi URL hợp lệ
+                type: 'GET', // Đảm bảo dấu phẩy ở đây là đúng
                 data: { fromDate: '', toDate: '' },
                 success: function (rs) {
+                    console.log(rs); // Kiểm tra xem dữ liệu trả về có hợp lệ không
 
-                    $.each(rs.Data, function (i, item) {
-                        var strDate = moment(item.Date).format('DD/MM/yyyy');
+                    $.each(rs.data, function (i, item) {
+                        var strDate = moment(item.date).format('DD/MM/yyyy'); // Sửa đổi 'Date' thành 'date'
                         arrDate.push(strDate);
-                        arrDoanhThu.push(item.DoanhThu);
-                        arrLoiNhuan.push(item.LoiNhuan);
+                        arrDoanhThu.push(item.doanhThu); // Sửa đổi 'DoanhThu' thành 'doanhThu'
+                        arrLoiNhuan.push(item.loiNhuan); // Sửa đổi 'LoiNhuan' thành 'loiNhuan'
                     });
+                    // Khởi tạo biểu đồ ChartJS sau khi có dữ liệu
                     var areaChartData = {
                         labels: arrDate,
                         datasets: [
@@ -122,16 +120,8 @@
                             },
                         ]
                     }
-                    //-------------
-                    //- BAR CHART -
-                    //-------------
-                    var barChartCanvas = $('#barChart').get(0).getContext('2d')
-                    var barChartData = $.extend(true, {}, areaChartData)
-                    var temp0 = areaChartData.datasets[0]
-                    var temp1 = areaChartData.datasets[1]
-                    barChartData.datasets[0] = temp1
-                    barChartData.datasets[1] = temp0
 
+                    var barChartCanvas = $('#barChart').get(0).getContext('2d');
                     var barChartOptions = {
                         responsive: true,
                         maintainAspectRatio: false,
@@ -140,23 +130,27 @@
 
                     new Chart(barChartCanvas, {
                         type: 'bar',
-                        data: barChartData,
+                        data: areaChartData,
                         options: barChartOptions
                     });
-                    load_data(rs.Data);
+
+                    load_data(rs.data);
+                },
+                error: function (xhr, status, error) {
+                    console.log("Lỗi khi gọi API:", error);
                 }
             });
-        })
+        });
 
         function load_data(data) {
             var strHtml = "";
             $.each(data, function (i, item) {
-                var strDate = moment(item.Date).format('DD/MM/yyyy');
+                var strDate = moment(item.date).format('DD/MM/yyyy');
                 strHtml += "<tr>";
                 strHtml += "<td>" + (i + 1) + "</td>";
                 strHtml += "<td>" + strDate + "</td>";
-                strHtml += "<td>" + item.DoanhThu + "</td>";
-                strHtml += "<td>" + item.LoiNhuan + "</td>";
+                strHtml += "<td>" + item.doanhThu + "</td>";
+                strHtml += "<td>" + item.loiNhuan + "</td>";
                 strHtml += "</tr>";
             });
             $('#load_data').html(strHtml);
