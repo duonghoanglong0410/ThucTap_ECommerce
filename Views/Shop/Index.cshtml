@@ -226,7 +226,8 @@
                                         <h4 class="bb-pro-title">
                                             <a href="@Url.Action("Index", "ProductDetails", new { id = product.Id })">@product.ProductCategory.Title</a>
                                         </h4>
-                                        <p>@product.Detail</p>
+                                        <p> @Html.Raw(@product.Detail)       </p>
+
                                         <div class="bb-price">
                                             <div class="inner-price">
                                                 @if (product.PriceSale > 0)

@@ -38,12 +38,12 @@
                             <img src="@Url.Content(@item.Image)" alt="blog-1">
                         </div>
                         <div class="blog-contact">
-                            <h5><a href="javascript:void(0)">@item.Title</a></h5>
+                            <a href="@Url.Action("Detail" , "Posts", new { id = item.Id })">@item.Title</a>
                             <p>
                                 @item.Description
                             </p>
                             <div class="blog-btn">
-                                <a href="blog-detail-left-sidebar.html" class="bb-btn-2">Read More</a>
+                                <a href="@Url.Action("Detail" , "Posts", new { id = item.Id })" class="bb-btn-2">Read More</a>
                             </div>
                         </div>
                     </div>

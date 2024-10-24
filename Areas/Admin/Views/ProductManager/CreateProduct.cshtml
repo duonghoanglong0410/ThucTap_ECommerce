@@ -75,6 +75,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="ProductCategoryId" class="control-label">Danh mục sản phẩm</label>
+                <label asp-for="ProductCategoryId" class="control-label">Danh mục sản phẩm</label>
                 <select asp-for="ProductCategoryId" class="form-control" asp-items="@(new SelectList(ViewBag.ProductCategories, "Id", "Title"))">
                     <option value="">-- Chọn danh mục --</option>
                 </select>
