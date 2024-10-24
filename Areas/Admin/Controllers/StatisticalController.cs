@@ -17,12 +17,12 @@ namespace TT_ECommerce.Areas.Admin.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public ActionResult Index()
         {
             return View();
         }
         [HttpGet]
-        public async Task<IActionResult> GetStatistical(string fromDate, string toDate)
+        public  async Task<ActionResult> GetStatisticalAsync(string fromDate, string toDate)
         {
             var query = from o in _context.TbOrders
                         join od in _context.TbOrderDetails
@@ -48,7 +48,7 @@ namespace TT_ECommerce.Areas.Admin.Controllers
                 query = query.Where(x => x.CreatedDate < endDate);
             }
 
-            var result = await query.GroupBy(x => x.CreatedDate.Date) // Sử dụng x.CreatedDate.Date để chỉ lấy ngày
+            var result = await query.GroupBy(x =>(x.CreatedDate.Date)) // Sử dụng x.CreatedDate.Date để chỉ lấy ngày
                 .Select(x => new
                 {
                     Date = x.Key,
