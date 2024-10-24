@@ -149,19 +149,13 @@
                         </div>
                         @foreach (var product in Model)
                         {
-                            <div class="col-lg-3 col-md-4 col-6 mb-24 bb-product-box pro-bb-content" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
-
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-24 bb-product-box pro-bb-content" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
                                 <div class="bb-pro-box">
-
-
-
                                     <div class="bb-pro-img">
                                         <a href="javascript:void(0)">
                                             <div class="inner-img">
-                                                <img class="main-img" src="@Url.Content(@product.Image)"
-                                                     alt="@product.Title">
-                                                <img class="hover-img" src="@Url.Content(@product.Image)"
-                                                     alt="@product.Title">
+                                                <img class="main-img" src="@Url.Content(@product.Image)" alt="@product.Title">
+                                                <img class="hover-img" src="@Url.Content(@product.Image)" alt="@product.Title">
                                             </div>
                                         </a>
                                         <ul class="bb-pro-actions">
@@ -201,9 +195,7 @@
                                         <h4 class="bb-pro-title">
                                             <a href="product-left-sidebar.html">@product.Title</a>
                                         </h4>
-                                        <p>
-                                            @product.Detail
-                                        </p>
+                                        <p>@product.Detail</p>
                                         <div class="bb-price">
                                             <div class="inner-price">
                                                 @if (product.PriceSale > 0)
@@ -219,9 +211,7 @@
                                             <span class="last-items">1 sản phẩm</span>
                                         </div>
                                     </div>
-
                                 </div>
-
                             </div>
                         }
                         <div class="col-12">

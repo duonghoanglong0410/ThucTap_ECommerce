@@ -11,13 +11,14 @@
     </div>
 </div>
 <section class="section-blog padding-b-50 padding-t-100">
-               @foreach (var item in Model)
-                        {
+           
     <div class="container">
         <div class="row">
      
             <div class="col-12">
                 <div class="blog-2-slider owl-carousel">
+                    @foreach (var item in Model)
+                    {
                     <div class="blog-2-card" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
                     
                             <div class="blog-img">
@@ -31,10 +32,11 @@
                             </div>
                      
                     </div>
+                    }
                 </div>
             </div>
          
         </div>
     </div>
-    }
+ 
 </section>

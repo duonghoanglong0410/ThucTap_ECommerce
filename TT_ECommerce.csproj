@@ -28,9 +28,16 @@
 
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="wwwroot\ckfinder\userfiles\" />
     <Folder Include="wwwroot\imgPosts\" />
     <Folder Include="wwwroot\imgProducts\" />
     <Folder Include="wwwroot\iconCategorys\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="CKFinder">
+      <HintPath>..\..\..\..\IT\OOP_Web\WebBanLinhKien\WebBanLinhKien\Content\ckfinder\ckfinder\bin\Release\CKFinder.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

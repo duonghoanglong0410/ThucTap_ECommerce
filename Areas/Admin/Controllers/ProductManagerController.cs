@@ -86,6 +86,9 @@ namespace TT_ECommerce.Areas.Admin.Controllers
                     }
                     product.Image = "/imgProducts/" + fileName;
                 }
+                product.ProductCode = "sanpham" + product.Id;
+                product.CreatedBy = User.Identity.Name;
+                product.Modifiedby = User.Identity.Name;
                 product.CreatedDate = DateTime.Now;
                 product.ModifiedDate = DateTime.Now;
 

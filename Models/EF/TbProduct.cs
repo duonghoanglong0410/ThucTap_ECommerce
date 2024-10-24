@@ -51,7 +51,7 @@ public partial class TbProduct
 
     public bool IsActive { get; set; }
 
-    public int ViewCount { get; set; }
+    public int? ViewCount { get; set; }
 
     public decimal OriginalPrice { get; set; }
 
