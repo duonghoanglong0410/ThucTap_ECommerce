@@ -37,6 +37,27 @@ namespace TT_ECommerce.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public async Task<IActionResult> PlaceOrder(TbOrder order)
+        {
+            // Kiểm tra tính hợp lệ của dữ liệu
+            if (!ModelState.IsValid)
+            {
+                return View(order); // Trả về view với thông tin lỗi nếu có
+            }
+
+            // Thiết lập thông tin cho đơn hàng
+            order.CreatedDate = DateTime.Now;
+            order.ModifiedDate = DateTime.Now;
+
+
+            // Lưu vào cơ sở dữ liệu
+            await _context.TbOrders.AddAsync(order);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Success"); // Chuyển đến trang thành công sau khi lưu
+        }
+
         public IActionResult Checkout()
         {
             var cartItems = _context.TbOrders
@@ -172,8 +193,9 @@ namespace TT_ECommerce.Controllers
             // Lặp qua từng sản phẩm trong giỏ hàng và cập nhật số lượng
             foreach (var item in quantities)
             {
-                var orderDetail = _context.TbOrderDetails.Include(od => od.Order)
-                    .ThenInclude(o => o.TbOrderDetails) // Bao gồm các chi tiết đơn hàng
+                var orderDetail = _context.TbOrderDetails
+                    .Include(od => od.Order)
+                    .ThenInclude(o => o.TbOrderDetails)
                     .FirstOrDefault(od => od.Id == item.Key); // Tìm orderDetail theo ID
 
                 if (orderDetail != null)
@@ -182,26 +204,27 @@ namespace TT_ECommerce.Controllers
                     orderDetail.Quantity = item.Value;
 
                     // Tính toán lại TotalAmount cho đơn hàng
-                    var order = orderDetail.Order; // Lấy đơn hàng tương ứng
-                    decimal totalAmount = 0; // Khởi tạo lại tổng số tiền
-
-                    foreach (var detail in order.TbOrderDetails) // Tính toán lại tổng tiền
+                    var order = orderDetail.Order;
+                    decimal totalAmount = 0;
+                    foreach (var detail in order.TbOrderDetails)
                     {
-                        totalAmount += detail.Price * detail.Quantity; // Cộng dồn
+                        totalAmount += detail.Price * detail.Quantity;
                     }
 
-                    // Cập nhật lại TotalAmount cho đơn hàng
+                    // Cập nhật lại tổng số tiền
                     order.TotalAmount = totalAmount;
 
-                    // Cập nhật lại orderDetail và order
+                    // Lưu lại thay đổi
                     _context.TbOrderDetails.Update(orderDetail);
                     _context.TbOrders.Update(order);
                 }
             }
-            _context.SaveChanges(); // Lưu thay đổi vào cơ sở dữ liệu
+
+            _context.SaveChanges();  // Lưu vào cơ sở dữ liệu
 
             return RedirectToAction("Index"); // Quay lại trang giỏ hàng
         }
+
 
         public int GetCartItemCount()
         {

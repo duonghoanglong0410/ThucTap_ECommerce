@@ -5,9 +5,9 @@
     decimal totalAmount = 0;
     decimal ship = 35000;
 }
- @foreach (var order in Model)
+@foreach (var order in Model)
 {
-      var orderDetail = order.TbOrderDetails.FirstOrDefault();
+    var orderDetail = order.TbOrderDetails.FirstOrDefault();
     if (orderDetail != null)
     {
         totalAmount += order.TotalAmount;
@@ -117,308 +117,86 @@
                             </tr>
                         </thead>
                         <tbody>
-                             @foreach (var order in Model)
-                            {
-                                var orderDetail = order.TbOrderDetails.FirstOrDefault();
-                                if (orderDetail != null)
-                                {
-                                <tr>
-                                    <td>
-                                        <a href="javascript:void(0)">
-                                            <div class="Product-cart">
-                                                    <img src="@orderDetail.Product.Image" alt="new-product-1">
-                                                    <span>@orderDetail.Product.Title</span>
-                                            </div>
-                                        </a>
-                                    </td>
-                                    <td>
-                                            <span class="price">@orderDetail.Product.Price.ToString("C0")</span>
-                                    </td>
-                                    <td>
-                                        <div class="qty-plus-minus">
-                                            <input class="qty-input" type="text" name="bb-qtybtn" value="1">
-                                        </div>
-                                    </td>
-                                    <td>
-                                            <span class="price">@(order.TotalAmount.ToString("C"))</span>
-                                    </td>
-                                    <td>
-                                        <form asp-action="Delete" method="post">
-                                            <input type="hidden" name="id" value="@orderDetail.Id" />
-                                            <button type="submit" class="btn btn-black btn-sm"
-                                                    onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?');">
-                                                <i class="ri-delete-bin-line"></i>
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                                
-                                }
-                            }
+                            <form method="post" asp-action="UpdateCart">
+                                <table>
+                                    @foreach (var order in Model)
+                                    {
+                                        var orderDetail = order.TbOrderDetails.FirstOrDefault();
+                                        if (orderDetail != null)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <a href="javascript:void(0)">
+                                                        <div class="Product-cart">
+                                                            <img src="@orderDetail.Product.Image" alt="new-product-1">
+                                                            <span>@orderDetail.Product.Title</span>
+                                                        </div>
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <span class="price">@orderDetail.Product.Price.ToString("C0")</span>
+                                                </td>
+                                                <td>
+                                                    <div class="qty-plus-minus">
+                                                        <input class="qty-input" type="number" name="quantities[@orderDetail.Id]" value="@orderDetail.Quantity">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span class="price">@(order.TotalAmount.ToString("C"))</span>
+                                                </td>
+                                                <td>
+                                                    <!-- Thay đổi nút Delete thành một thẻ có onclick gọi AJAX -->
+                                                    <button type="button" class="btn btn-black btn-sm" onclick="deleteItem(@orderDetail.Id)">
+                                                        <i class="ri-delete-bin-line"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                    <tr>
+                                        <td colspan="5">
+                                            <button type="submit" class="bb-btn-2 check-btn" style="display: inline-block; margin-right: 20px;" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">Update</button>
+                                            <a asp-area="" asp-controller="Cart" asp-action="Checkout" class="bb-btn-2 check-btn" style="display: inline-block;" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">Check Out</a>
+                                        </td>
+
+                                    </tr>
+                                </table>
+                            </form>
                         </tbody>
+
+                        <!-- Link đến trang Checkout -->
+
+
                     </table>
+
                 </div>
-                <a asp-area="" asp-controller="Cart" asp-action="Checkout" class="bb-btn-2 check-btn" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">Check Out</a>
+
+
             </div>
         </div>
     </div>
 </section>
 <!-- Related product -->
-<section class="section-related-product padding-tb-50">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="section-title bb-center" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
-                    <div class="section-detail ">
-                        <h2 class="bb-title">New <span>Arrivals</span></h2>
-                        <p>Browse The Collection of Top Products.</p>
-                    </div>
-                    <div id="dealend" class="dealend-timer"></div>
-                </div>
-            </div>
-            <div class="col-12">
-                <div class="bb-deal-slider">
-                    <div class="bb-deal-block owl-carousel">
-                        <div class="bb-deal-card" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
-                            <div class="bb-pro-box">
-                                <div class="bb-pro-img">
-                                    <span class="flags">
-                                        <span>New</span>
-                                    </span>
-                                    <a href="javascript:void(0)">
-                                        <div class="inner-img">
-                                            <img class="main-img" src="assets/img/product/1.jpg" alt="product-1">
-                                            <img class="hover-img" src="assets/img/product/back-1.jpg" alt="product-1">
-                                        </div>
-                                    </a>
-                                    <ul class="bb-pro-actions">
-                                        <li class="bb-btn-group">
-                                            <a href="javascript:void(0)">
-                                                <i class="ri-heart-line"></i>
-                                            </a>
-                                        </li>
-                                        <li class="bb-btn-group">
-                                            <a href="javascript:void(0)"
-                                               data-link-action="quickview" title="Quick view" data-bs-toggle="modal"
-                                               data-bs-target="#bry_quickview_modal">
-                                                <i class="ri-eye-line"></i>
-                                            </a>
-                                        </li>
-                                        <li class="bb-btn-group">
-                                            <a href="compare.html">
-                                                <i class="ri-repeat-line"></i>
-                                            </a>
-                                        </li>
-                                        <li class="bb-btn-group">
-                                            <a href="javascript:void(0)">
-                                                <i class="ri-shopping-bag-4-line"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="bb-pro-contact">
-                                    <div class="bb-pro-subtitle">
-                                        <a href="shop-left-sidebar-col-3.html">Chocolates</a>
-                                        <span class="bb-pro-rating">
-                                            <i class="ri-star-fill"></i>
-                                            <i class="ri-star-fill"></i>
-                                            <i class="ri-star-fill"></i>
-                                            <i class="ri-star-fill"></i>
-                                            <i class="ri-star-line"></i>
-                                        </span>
-                                    </div>
-                                    <h4 class="bb-pro-title">
-                                        <a href="product-left-sidebar.html">Mixed Fruits Chocolates Pack</a>
-                                    </h4>
-                                    <div class="bb-price">
-                                        <div class="inner-price">
-                                            <span class="new-price">$25</span>
-                                            <span class="old-price">$30</span>
-                                        </div>
-                                        <span class="last-items">1 Pack</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="bb-deal-card" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
-                            <div class="bb-pro-box">
-                                <div class="bb-pro-img">
-                                    <span class="flags">
-                                        <span>Hot</span>
-                                    </span>
-                                    <a href="javascript:void(0)">
-                                        <div class="inner-img">
-                                            <img class="main-img" src="assets/img/product/2.jpg" alt="product-2">
-                                            <img class="hover-img" src="assets/img/product/back-2.jpg" alt="product-2">
-                                        </div>
-                                    </a>
-                                    <ul class="bb-pro-actions">
-                                        <li class="bb-btn-group">
-                                            <a href="javascript:void(0)">
-                                                <i class="ri-heart-line"></i>
-                                            </a>
-                                        </li>
-                                        <li class="bb-btn-group">
-                                            <a href="javascript:void(0)"
-                                               data-link-action="quickview" title="Quick view" data-bs-toggle="modal"
-                                               data-bs-target="#bry_quickview_modal">
-                                                <i class="ri-eye-line"></i>
-                                            </a>
-                                        </li>
-                                        <li class="bb-btn-group">
-                                            <a href="compare.html">
-                                                <i class="ri-repeat-line"></i>
-                                            </a>
-                                        </li>
-                                        <li class="bb-btn-group">
-                                            <a href="javascript:void(0)">
-                                                <i class="ri-shopping-bag-4-line"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="bb-pro-contact">
-                                    <div class="bb-pro-subtitle">
-                                        <a href="shop-left-sidebar-col-3.html">Juice</a>
-                                        <span class="bb-pro-rating">
-                                            <i class="ri-star-fill"></i>
-                                            <i class="ri-star-fill"></i>
-                                            <i class="ri-star-fill"></i>
-                                            <i class="ri-star-fill"></i>
-                                            <i class="ri-star-line"></i>
-                                        </span>
-                                    </div>
-                                    <h4 class="bb-pro-title"><a href="product-left-sidebar.html">Organic Apple Juice Pack</a></h4>
-                                    <div class="bb-price">
-                                        <div class="inner-price">
-                                            <span class="new-price">$15</span>
-                                            <span class="item-left">3 Left</span>
-                                        </div>
-                                        <span class="last-items">100 ml</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="bb-deal-card" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600">
-                            <div class="bb-pro-box">
-                                <div class="bb-pro-img">
-                                    <a href="javascript:void(0)">
-                                        <div class="inner-img">
-                                            <img class="main-img" src="assets/img/product/3.jpg" alt="product-3">
-                                            <img class="hover-img" src="assets/img/product/back-3.jpg" alt="product-3">
-                                        </div>
-                                    </a>
-                                    <ul class="bb-pro-actions">
-                                        <li class="bb-btn-group">
-                                            <a href="javascript:void(0)">
-                                                <i class="ri-heart-line"></i>
-                                            </a>
-                                        </li>
-                                        <li class="bb-btn-group">
-                                            <a href="javascript:void(0)"
-                                               data-link-action="quickview" title="Quick view" data-bs-toggle="modal"
-                                               data-bs-target="#bry_quickview_modal">
-                                                <i class="ri-eye-line"></i>
-                                            </a>
-                                        </li>
-                                        <li class="bb-btn-group">
-                                            <a href="compare.html">
-                                                <i class="ri-repeat-line"></i>
-                                            </a>
-                                        </li>
-                                        <li class="bb-btn-group">
-                                            <a href="javascript:void(0)">
-                                                <i class="ri-shopping-bag-4-line"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="bb-pro-contact">
-                                    <div class="bb-pro-subtitle">
-                                        <a href="shop-left-sidebar-col-3.html">Juice</a>
-                                        <span class="bb-pro-rating">
-                                            <i class="ri-star-fill"></i>
-                                            <i class="ri-star-fill"></i>
-                                            <i class="ri-star-fill"></i>
-                                            <i class="ri-star-fill"></i>
-                                            <i class="ri-star-line"></i>
-                                        </span>
-                                    </div>
-                                    <h4 class="bb-pro-title">
-                                        <a href="product-left-sidebar.html">Mixed Almond nuts juice Pack</a>
-                                    </h4>
-                                    <div class="bb-price">
-                                        <div class="inner-price">
-                                            <span class="new-price">$32</span>
-                                            <span class="old-price">$39</span>
-                                        </div>
-                                        <span class="last-items">250 g</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="bb-deal-card" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="800">
-                            <div class="bb-pro-box">
-                                <div class="bb-pro-img">
-                                    <span class="flags">
-                                        <span>Sale</span>
-                                    </span>
-                                    <a href="javascript:void(0)">
-                                        <div class="inner-img">
-                                            <img class="main-img" src="assets/img/product/4.jpg" alt="product-4">
-                                            <img class="hover-img" src="assets/img/product/back-4.jpg" alt="product-4">
-                                        </div>
-                                    </a>
-                                    <ul class="bb-pro-actions">
-                                        <li class="bb-btn-group">
-                                            <a href="javascript:void(0)">
-                                                <i class="ri-heart-line"></i>
-                                            </a>
-                                        </li>
-                                        <li class="bb-btn-group">
-                                            <a href="javascript:void(0)"
-                                               data-link-action="quickview" title="Quick view" data-bs-toggle="modal"
-                                               data-bs-target="#bry_quickview_modal">
-                                                <i class="ri-eye-line"></i>
-                                            </a>
-                                        </li>
-                                        <li class="bb-btn-group">
-                                            <a href="compare.html">
-                                                <i class="ri-repeat-line"></i>
-                                            </a>
-                                        </li>
-                                        <li class="bb-btn-group">
-                                            <a href="javascript:void(0)">
-                                                <i class="ri-shopping-bag-4-line"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="bb-pro-contact">
-                                    <div class="bb-pro-subtitle">
-                                        <a href="shop-left-sidebar-col-3.html">Fruits</a>
-                                        <span class="bb-pro-rating">
-                                            <i class="ri-star-fill"></i>
-                                            <i class="ri-star-fill"></i>
-                                            <i class="ri-star-fill"></i>
-                                            <i class="ri-star-fill"></i>
-                                            <i class="ri-star-line"></i>
-                                        </span>
-                                    </div>
-                                    <h4 class="bb-pro-title"><a href="product-left-sidebar.html">Fresh Mango Slice Juice</a></h4>
-                                    <div class="bb-price">
-                                        <div class="inner-price">
-                                            <span class="new-price">$25</span>
-                                            <span class="item-left">Out Of Stock</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function deleteItem(itemId) {
+        if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?')) {
+            $.ajax({
+                url: '@Url.Action("Delete", "Cart")', // Đường dẫn tới action Delete
+                type: 'POST',
+                data: {
+                    id: itemId // Gửi id của sản phẩm
+                },
+                success: function (response) {
+                    // Xử lý thành công, có thể làm mới trang hoặc xóa dòng sản phẩm trên trang
+                    location.reload(); // Làm mới trang để cập nhật giỏ hàng
+                },
+                error: function (xhr, status, error) {
+                    // Xử lý lỗi nếu có
+                    alert('Có lỗi xảy ra! Vui lòng thử lại.');
+                }
+            });
+        }
+    }
+</script>

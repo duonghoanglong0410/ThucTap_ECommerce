@@ -31,16 +31,16 @@
 <section class="section-category padding-t-50 mb-24">
     <div class="container">
         <div class="row">
-            <div class="col-12">
+            <div class="col-24">
                 <div class="bb-category-6-colum owl-carousel">
-                    @foreach (var category in Model.DistinctBy(c => c.ProductCategory.Id))
+                    @foreach (var category in Model)
                     {
                         <div class="bb-category-box category-items-@categoryIndex" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="500">
                             <div class="category-image">
                                 <img src="@Url.Content(category.ProductCategory.Icon)" alt="@category.ProductCategory.Title">
                             </div>
                             <div class="category-sub-contact">
-                                <h5><a href="shop-left-sidebar-col-3.html">@category.ProductCategory.Title</a></h5>
+                                <h5><a href="">@category.ProductCategory.Title</a></h5>
                             </div>
                         </div>
 
@@ -110,7 +110,7 @@
                                         var maxPrice = ViewContext.HttpContext.Request.Query["maxPrice"].ToString();
                                         if (string.IsNullOrEmpty(maxPrice))
                                         {
-                                            maxPrice = "1500";
+                                            maxPrice = "1500000000";
                                         }
                                     }
                                     <input type="range" id="priceRange"
@@ -224,7 +224,7 @@
                                             </span>
                                         </div>
                                         <h4 class="bb-pro-title">
-                                            <a href="@Url.Action("Index", "ProductDetails", new { id = product.Id })">@product.ProductCategory.Title</a>
+                                            <a href="@Url.Action("Index", "ProductDetails", new { id = product.Id })">@product.Title</a>
                                         </h4>
                                         <p> @Html.Raw(@product.Detail)       </p>
 

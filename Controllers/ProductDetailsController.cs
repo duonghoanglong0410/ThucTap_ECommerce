@@ -37,7 +37,7 @@ namespace TT_ECommerce.Controllers
             }
 
             // Lấy thông tin khách hàng từ Claims
-            var customerName = User.FindFirst(ClaimTypes.Name)?.Value;
+            var customerName = "null";
             var email = User.FindFirst(ClaimTypes.Email)?.Value;
 
             if (string.IsNullOrEmpty(customerName) || string.IsNullOrEmpty(email))
@@ -80,7 +80,7 @@ namespace TT_ECommerce.Controllers
             _context.TbOrderDetails.Add(orderDetail);
             _context.SaveChanges();
 
-         
+
             return Json(new { success = true, message = "Product added to cart successfully!" });
         }
 
