@@ -17,10 +17,24 @@ namespace TT_ECommerce.Controllers
         {
             _context = context;
         }
-        public async Task<IActionResult> Index(string? categoryId, string? searchKeyword, string? search, decimal? minPrice, decimal? maxPrice, string? sortOrder, int page = 1, int pageSize = 6)
+        public async Task<IActionResult> Index(string? categoryId, string? searchKeyword, string? search, decimal? minPrice, decimal? maxPrice, string? sort, int page = 1, int pageSize = 8)
         {
             // Lấy tất cả danh mục sản phẩm để hiển thị trong dropdown
             ViewBag.Categories = await _context.TbProductCategories.ToListAsync();
+
+            // Tạo danh sách tùy chọn để sắp xếp
+            var sortOptions = new List<SelectListItem>
+            {
+                new SelectListItem { Value = "default", Text = "Position" },
+                new SelectListItem { Value = "relevance", Text = "Relevance" },
+                new SelectListItem { Value = "name_asc", Text = "Name, A to Z" },
+                new SelectListItem { Value = "name_desc", Text = "Name, Z to A" },
+                new SelectListItem { Value = "price_asc", Text = "Price, low to high" },
+                new SelectListItem { Value = "price_desc", Text = "Price, high to low" }
+            };
+
+            ViewBag.SortOptions = sortOptions;
+            ViewBag.Sort = sort; // Lưu giá trị sort để kiểm tra trong view
 
             // Truy vấn sản phẩm từ database
             var productsQuery = _context.TbProducts
@@ -40,23 +54,18 @@ namespace TT_ECommerce.Controllers
             {
                 productsQuery = productsQuery.Where(p => p.Title.Contains(search) || p.Description.Contains(search));
             }
-            // Lọc theo từ khóa tìm kiếm sản phẩm
-            if (!string.IsNullOrEmpty(searchKeyword))
-            {
-                productsQuery = productsQuery.Where(p => p.Title.Contains(searchKeyword) || p.Description.Contains(searchKeyword));
-            }
+
             // Lọc theo giá
             if (minPrice.HasValue || maxPrice.HasValue)
             {
-                // Nếu sản phẩm có giá khuyến mãi, lọc theo PriceSale, nếu không thì lọc theo Price
                 productsQuery = productsQuery.Where(p =>
                     (p.IsSale && p.PriceSale >= (minPrice ?? 0) && p.PriceSale <= (maxPrice ?? decimal.MaxValue)) ||
                     (!p.IsSale && p.Price >= (minPrice ?? 0) && p.Price <= (maxPrice ?? decimal.MaxValue))
                 );
             }
 
-            // Sắp xếp theo giá
-            switch (sortOrder)
+            // Sắp xếp theo tùy chọn
+            switch (sort)
             {
                 case "price_asc":
                     productsQuery = productsQuery.OrderBy(p => p.IsSale ? p.PriceSale : p.Price);
@@ -64,8 +73,14 @@ namespace TT_ECommerce.Controllers
                 case "price_desc":
                     productsQuery = productsQuery.OrderByDescending(p => p.IsSale ? p.PriceSale : p.Price);
                     break;
+                case "name_asc":
+                    productsQuery = productsQuery.OrderBy(p => p.Title);
+                    break;
+                case "name_desc":
+                    productsQuery = productsQuery.OrderByDescending(p => p.Title);
+                    break;
                 default:
-                    productsQuery = productsQuery.OrderBy(p => p.Title); // Sắp xếp mặc định theo tên sản phẩm
+                    productsQuery = productsQuery.OrderBy(p => p.Title); // Sắp xếp mặc định
                     break;
             }
 
@@ -77,7 +92,6 @@ namespace TT_ECommerce.Controllers
             ViewBag.Page = page;
             ViewBag.PageSize = pageSize;
             ViewBag.TotalItems = totalItems;
-            ViewBag.SortOrder = sortOrder;
             ViewBag.SearchKeyword = searchKeyword;
 
             return View(products);
