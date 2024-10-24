@@ -24,12 +24,7 @@
                         <div class="cols">
                             <div class="header-search">
                                 <form class="bb-btn-group-form" action="#">
-                                    <div class="inner-select">
-                                        <div class="custom-select">
-                                            @await Component.InvokeAsync("Category")
-
-                                        </div>
-                                    </div>
+                                    
                                     <input class="form-control bb-search-bar" name="searchKeyword" id="searchKeyword" placeholder="Search products..."
                                            type="text" value="@ViewContext.HttpContext.Request.Query["searchKeyword"]">
                                     <button class="submit" type="submit"><i class="ri-search-line"></i></button>
@@ -121,11 +116,12 @@
                                     </ul>
 
                                 </li>
-                                <li class="nav-item bb-dropdown">
-                                    <a class="nav-link bb-dropdown-item" asp-area="" asp-controller="About" asp-action="Index">About</a>
-                                </li>
+                                
                                 <li class="nav-item bb-dropdown">
                                     <a class="nav-link bb-dropdown-item" asp-area="" asp-controller="Services" asp-action="Index">Services</a>
+                                </li>
+                                <li class="nav-item bb-dropdown">
+                                    <a class="nav-link bb-dropdown-item" asp-area="" asp-controller="About" asp-action="Index">About</a>
                                 </li>
                                 <li class="nav-item bb-dropdown">
                                     <a class="nav-link bb-dropdown-item" asp-area="" asp-controller="Contact" asp-action="Index">Contact</a>
