@@ -52,7 +52,14 @@
                                             </div>
                                             <div class="bb-btn-desc">
                                                 <span class="bb-btn-title">Account</span>
-                                                <span class="bb-btn-stitle">Login</span>
+                                                @if (User.Identity.IsAuthenticated)
+                                                {
+                                                    <span class="bb-btn-stitle">@User.Identity.Name</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="bb-btn-stitle">Login</span>
+                                                }
                                             </div>
                                         </a>
                                         <ul class="bb-dropdown-menu">
