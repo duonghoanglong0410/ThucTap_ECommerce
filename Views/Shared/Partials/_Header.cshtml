@@ -57,11 +57,23 @@
                                             </div>
                                         </a>
                                         <ul class="bb-dropdown-menu">
-                                            <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Login">Register</a></li>
-                                            <li><a class="dropdown-item" asp-area="" asp-controller="Cart" asp-action="CheckOut">CheckOut</a></li>
-                                            <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Login">Login</a></li>
+                                            @if (User.Identity.IsAuthenticated)
+                                            {
+                                                <li><a class="dropdown-item" asp-area="" asp-controller="Cart" asp-action="CheckOut">CheckOut</a></li>
+                                                <li>
+                                                    <form asp-action="Logout" asp-controller="Account" method="post" style="display:inline;">
+                                                        @Html.AntiForgeryToken()
+                                                        <button type="submit" class="dropdown-item">LogOut</button>
+                                                    </form>
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Login">Login</a></li>
+                                            }
                                         </ul>
                                     </div>
+
                                     <a href="javascript:void(0)" class="bb-header-btn bb-cart-toggle" title="Cart">
                                         <div class="header-icon">
                                             <svg class="svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
