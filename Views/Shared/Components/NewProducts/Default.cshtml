@@ -51,19 +51,19 @@
                                         </a>
                                         <ul class="bb-pro-actions">
                                             <li class="bb-btn-group">
-                                                <a href="javascript:void(0)" title="Wishlist">
+                                                <a href="" title="Wishlist">
                                                     <i class="ri-heart-line"></i>
                                                 </a>
                                             </li>
                                             <li class="bb-btn-group">
-                                                <a href="javascript:void(0)" data-link-action="quickview"
+                                                <a href="" data-link-action="quickview"
                                                    title="Quick View" data-bs-toggle="modal"
-                                                   data-bs-target="#bry_quickview_modal">
+                                                   data-bs-target="#">
                                                     <i class="ri-eye-line"></i>
                                                 </a>
                                             </li>
                                             <li class="bb-btn-group">
-                                                <a href="compare.html" title="Compare">
+                                                <a href="" title="Compare">
                                                     <i class="ri-repeat-line"></i>
                                                 </a>
                                             </li>
@@ -76,8 +76,8 @@
                                     </div>
                                     <div class="bb-pro-contact">
                                         <div class="bb-pro-subtitle">
-                                            <a href="shop-left-sidebar-col-3.html">@item.ProductCategory.Title</a>
-                                            <span class="bb-pro-rating">
+                                                <a href="@Url.Action("Index", "ProductDetails", new { id = item.Id })">@item.ProductCategory.Title</a>
+                                                <span class="bb-pro-rating">
                                                 <i class="ri-star-fill"></i>
                                                 <i class="ri-star-fill"></i>
                                                 <i class="ri-star-fill"></i>
@@ -86,9 +86,7 @@
                                             </span>
                                         </div>
                                         <h4 class="bb-pro-title">
-                                            <a href="product-left-sidebar.html">
-                                                @item.Title
-                                            </a>
+                                                <a href="@Url.Action("Index", "ProductDetails", new { id = item.Id })">@item.ProductCategory.Title</a>
                                         </h4>
                                         <div class="bb-price">
                                             <div class="inner-price">
@@ -129,24 +127,24 @@
                                         </a>
                                         <ul class="bb-pro-actions">
                                             <li class="bb-btn-group">
-                                                <a href="javascript:void(0)" title="Wishlist">
+                                                <a href="" title="Wishlist">
                                                     <i class="ri-heart-line"></i>
                                                 </a>
                                             </li>
                                             <li class="bb-btn-group">
-                                                <a href="javascript:void(0)" data-link-action="quickview"
+                                                <a href="" data-link-action="quickview"
                                                    title="Quick View" data-bs-toggle="modal"
-                                                   data-bs-target="#bry_quickview_modal">
+                                                   data-bs-target="">
                                                     <i class="ri-eye-line"></i>
                                                 </a>
                                             </li>
                                             <li class="bb-btn-group">
-                                                <a href="compare.html" title="Compare">
+                                                <a href="" title="Compare">
                                                     <i class="ri-repeat-line"></i>
                                                 </a>
                                             </li>
                                             <li class="bb-btn-group">
-                                                <a href="javascript:void(0)" title="Add To Cart">
+                                                <a href="" title="Add To Cart">
                                                     <i class="ri-shopping-bag-4-line"></i>
                                                 </a>
                                             </li>
@@ -154,8 +152,8 @@
                                     </div>
                                     <div class="bb-pro-contact">
                                         <div class="bb-pro-subtitle">
-                                            <a href="shop-left-sidebar-col-3.html">@item.ProductCategory.Title</a>
-                                            <span class="bb-pro-rating">
+                                                <a href="@Url.Action("Index", "ProductDetails", new { id = item.Id })">@item.ProductCategory.Title</a>
+                                                <span class="bb-pro-rating">
                                                 <i class="ri-star-fill"></i>
                                                 <i class="ri-star-fill"></i>
                                                 <i class="ri-star-fill"></i>
@@ -164,9 +162,8 @@
                                             </span>
                                         </div>
                                         <h4 class="bb-pro-title">
-                                            <a href="product-left-sidebar.html">
-                                                @item.Title
-                                            </a>
+                                                <a href="@Url.Action("Index", "ProductDetails", new { id = item.Id })">@item.ProductCategory.Title</a>
+
                                         </h4>
                                         <div class="bb-price">
                                             <div class="inner-price">

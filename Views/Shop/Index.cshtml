@@ -86,7 +86,6 @@
                                             @(selectedCategoryIds.Length == 0 ? "checked" : "")> All
                                         </label>
                                     </li>
-
                                     <!-- Vòng lặp qua các danh mục và hiển thị checkbox tương ứng -->
                                     @foreach (var category in ViewBag.Categories)
                                     {
@@ -181,6 +180,7 @@
                                     <div class="bb-pro-img">
                                         <a href="javascript:void(0)">
                                             <div class="inner-img">
+
                                                 <img class="main-img" src="@Url.Content(@product.Image)"
                                                      alt="@product.Title">
                                                 <img class="hover-img" src="@Url.Content(@product.Image)"
@@ -194,14 +194,14 @@
                                                 </a>
                                             </li>
                                             <li class="bb-btn-group">
-                                                <a href="javascript:void(0)"
-                                                   data-link-action="quickview" title="Quick view" data-bs-toggle="modal"
-                                                   data-bs-target="#bry_quickview_modal">
+                                                <a href="#"
+                                                   data-link-action="#" title="Quick view" data-bs-toggle="modal"
+                                                   data-bs-target="#">
                                                     <i class="ri-eye-line"></i>
                                                 </a>
                                             </li>
                                             <li class="bb-btn-group">
-                                                <a href="compare.html">
+                                                <a href="#">
                                                     <i class="ri-repeat-line"></i>
                                                 </a>
                                             </li>
@@ -214,7 +214,7 @@
                                     </div>
                                     <div class="bb-pro-contact">
                                         <div class="bb-pro-subtitle">
-                                            <a href="shop-left-sidebar-col-3.html">@product.ProductCategory.Title</a>
+                                            <a href="@Url.Action("Index", "ProductDetails", new { id = product.Id })">@product.ProductCategory.Title</a>
                                             <span class="bb-pro-rating">
                                                 <i class="ri-star-fill"></i>
                                                 <i class="ri-star-fill"></i>
@@ -224,7 +224,7 @@
                                             </span>
                                         </div>
                                         <h4 class="bb-pro-title">
-                                            <a href="product-left-sidebar.html">@product.Title</a>
+                                            <a href="@Url.Action("Index", "ProductDetails", new { id = product.Id })">@product.ProductCategory.Title</a>
                                         </h4>
                                         <p>@product.Detail</p>
                                         <div class="bb-price">

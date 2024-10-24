@@ -81,12 +81,11 @@ namespace TT_ECommerce.Areas.Admin.Controllers
                     Directory.CreateDirectory(uploadPath);
                 }
 
-                string fileName = null;
                 // Kiểm tra nếu có tệp hình ảnh được tải lên
                 if (Image != null && Image.Length > 0)
                 {
                     // Tạo tên tệp ngẫu nhiên để tránh trùng lặp
-                    fileName = Guid.NewGuid().ToString() + Path.GetExtension(Image.FileName);
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(Image.FileName);
                     string filePath = Path.Combine(uploadPath, fileName);
 
                     // Lưu tệp vào đường dẫn chỉ định
@@ -94,14 +93,12 @@ namespace TT_ECommerce.Areas.Admin.Controllers
                     {
                         await Image.CopyToAsync(fileStream);
                     }
+
                     // Lưu đường dẫn tương đối vào cơ sở dữ liệu
                     pro.Image = "/imgProducts/" + fileName;
                 }
 
-                // Thiết lập thông tin sản phẩm
-                pro.ProductCode = "sanpham" + pro.Id;
-                pro.CreatedBy = User.Identity?.Name ?? "Unknown";  // Kiểm tra nếu người dùng chưa đăng nhập
-                pro.Modifiedby = User.Identity?.Name ?? "Unknown";
+                // Thiết lập thời gian tạo và sửa đổi
                 pro.CreatedDate = DateTime.Now;
                 pro.ModifiedDate = DateTime.Now;
 
@@ -116,7 +113,6 @@ namespace TT_ECommerce.Areas.Admin.Controllers
             ViewBag.ProductCategories = _context.TbProductCategories.ToList();
             return View(pro);
         }
-
 
         //  [Route("EditProduct")]
         [HttpGet]

@@ -104,8 +104,8 @@
                                             </a>
                                         </li>
                                         <li class="bb-btn-group">
-                                            <a href="javascript:void(0)" data-link-action="quickview" title="Quick view" data-bs-toggle="modal"
-                                               data-bs-target="#bry_quickview_modal">
+                                            <a href="#" data-link-action="#" title="Quick view" data-bs-toggle="modal"
+                                               data-bs-target="#">
                                                 <i class="ri-eye-line"></i>
                                             </a>
                                         </li>
@@ -129,7 +129,7 @@
                                 <div class="accordion-body">
                                     <div class="bb-details">
                                         <p>
-                                            @Model.Detail
+                                            @Html.Raw(@Model.Detail)
                                         </p>
                                     </div>
                                 </div>
