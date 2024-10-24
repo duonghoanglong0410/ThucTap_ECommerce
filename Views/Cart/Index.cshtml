@@ -3,6 +3,15 @@
 @{
     ViewData["Title"] = "Index";
     decimal totalAmount = 0;
+    decimal ship = 35000;
+}
+ @foreach (var order in Model)
+{
+      var orderDetail = order.TbOrderDetails.FirstOrDefault();
+    if (orderDetail != null)
+    {
+        totalAmount += order.TotalAmount;
+    }
 }
 <!-- Breadcrumb ----------------------------------------------------------------------------------------------->
 <section class="section-breadcrumb margin-b-50">
@@ -70,8 +79,8 @@
                         <div class="bb-cart-summary">
                             <div class="inner-summary">
                                 <ul>
-                                    <li><span class="text-left">Sub-Total</span><span class="text-right">$80.00</span></li>
-                                    <li><span class="text-left">Delivery Charges</span><span class="text-right">$80.00</span></li>
+                                    <li><span class="text-left">Sub-Total</span><span class="text-right">@(totalAmount.ToString("C"))</span></li>
+                                    <li><span class="text-left">Delivery Charges</span><span class="text-right">35.000</span></li>
                                     <li>
                                         <span class="text-left">Coupon Discount</span>
                                         <span class="text-right"><a class="bb-coupon drop-coupon">Apply Coupon</a></span>
@@ -88,7 +97,7 @@
                             </div>
                             <div class="summary-total">
                                 <ul>
-                                    <li><span class="text-left">Total Amount</span><span class="text-right">$80.00</span></li>
+                                    <li><span class="text-left">Total Amount</span><span class="text-right">@((totalAmount + ship).ToString("C"))</span></li>
                                 </ul>
                             </div>
                         </div>
@@ -123,7 +132,7 @@
                                         </a>
                                     </td>
                                     <td>
-                                            <span class="price">@orderDetail.Product.Price.ToString("C")</span>
+                                            <span class="price">@orderDetail.Product.Price.ToString("C0")</span>
                                     </td>
                                     <td>
                                         <div class="qty-plus-minus">
@@ -143,6 +152,7 @@
                                         </form>
                                     </td>
                                 </tr>
+                                
                                 }
                             }
                         </tbody>

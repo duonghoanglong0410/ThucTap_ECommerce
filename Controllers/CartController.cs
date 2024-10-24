@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using TT_ECommerce.Data;
 using TT_ECommerce.Models.EF;
+using static NuGet.Packaging.PackagingConstants;
 
 namespace TT_ECommerce.Controllers
 {
@@ -25,6 +26,9 @@ namespace TT_ECommerce.Controllers
 
             // Lấy tổng số lượng sản phẩm trong giỏ hàng và lưu vào ViewBag
             ViewBag.CartItemCount = GetCartItemCount();
+
+            var orders = _context.TbOrders.ToList(); // Lấy danh sách đơn hàng
+            decimal totalAmount = orders.Sum(o => o.TotalAmount);
             return View(cartItems);
         }
 
