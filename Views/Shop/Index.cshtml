@@ -1,11 +1,10 @@
 ﻿@model IEnumerable<TT_ECommerce.Models.EF.TbProduct>
-
-
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
-        Layout = "~/Views/Shared/_LayoutUser.cshtml";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
     int categoryIndex = 1;
-
 }
+
 <!-- Breadcrumb -->
 <section class="section-breadcrumb margin-b-50">
     <div class="container">
@@ -33,7 +32,7 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-<div class="bb-category-6-colum owl-carousel">
+                <div class="bb-category-6-colum owl-carousel">
                     @foreach (var category in Model.DistinctBy(c => c.ProductCategory.Id))
                     {
                         <div class="bb-category-box category-items-@categoryIndex" data-aos="flip-left" data-aos-duration="1000" data-aos-delay="500">
@@ -51,9 +50,7 @@
                             categoryIndex = 1;
                         }
                     }
-
-</div>
-
+                </div>
             </div>
         </div>
     </div>
@@ -69,51 +66,45 @@
                     <h5>Filters</h5>
                     <a class="filter-close" href="javascript:void(0)">×</a>
                 </div>
-                <div class="bb-shop-wrap">
+                <div class="bb-shop-wrap" style="height:900px">
                     <form id="filterForm" method="get">
                         @{
                             // Lấy categoryId từ query và chuyển thành mảng string[]
                             var categoryIds = ViewContext.HttpContext.Request.Query["categoryId"].ToString();
                             string[] selectedCategoryIds = categoryIds.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
                         }
-                    <div class="bb-sidebar-block">
-                        <div class="bb-sidebar-title">
-                            <h3>Category</h3>
-                        </div>
+                        <div class="bb-sidebar-block">
+                            <div class="bb-sidebar-title">
+                                <h3>Category</h3>
+                            </div>
                             <div class="bb-sidebar-contact">
-                                <form id="filterForm" method="get">
-                                    <ul>
-                                        <!-- Checkbox cho tùy chọn "All" -->
+                                <ul>
+                                    <!-- Checkbox cho tùy chọn "All" -->
+                                    <li>
+                                        <label>
+                                            <input type="checkbox" name="categoryId" value="" class="category-filter"
+                                            @(selectedCategoryIds.Length == 0 ? "checked" : "")> All
+                                        </label>
+                                    </li>
+
+                                    <!-- Vòng lặp qua các danh mục và hiển thị checkbox tương ứng -->
+                                    @foreach (var category in ViewBag.Categories)
+                                    {
                                         <li>
                                             <label>
-                                                <input type="checkbox" name="categoryId" value="" class="category-filter"
-                                                @(selectedCategoryIds.Length == 0 ? "checked" : "")> All
+                                                <input type="checkbox" name="categoryId" value="@category.Id" class="category-filter"
+                                                @(Array.IndexOf(selectedCategoryIds, category.Id.ToString()) >= 0 ? "checked" : "")> @category.Title
                                             </label>
                                         </li>
-
-                                        <!-- Vòng lặp qua các danh mục và hiển thị checkbox tương ứng -->
-                                        @foreach (var category in ViewBag.Categories)
-                                        {
-                                            <li>
-                                                <label>
-                                                    <input type="checkbox" name="categoryId" value="@category.Id" class="category-filter"
-                                                    @(Array.IndexOf(selectedCategoryIds, category.Id.ToString()) >= 0 ? "checked" : "")> @category.Title
-                                                </label>
-                                            </li>
-                                        }
-                                    </ul>
-                                    <!-- Nút button để lọc sản phẩm -->
-                                    <button type="submit" class="btn btn-secondary" style="margin-top: 10px;">Filter</button>
-                                </form>
+                                    }
+                                </ul>
                             </div>
-
-
-                    </div>
-                    <div class="bb-sidebar-block">
-                        <div class="bb-sidebar-title">
-                            <h3>Price</h3>
                         </div>
-                        <div class="bb-price-range">
+                        <div class="bb-sidebar-block">
+                            <div class="bb-sidebar-title">
+                                <h3>Price</h3>
+                            </div>
+                            <div class="bb-price-range">
                                 <div class="filter-price-slider">
                                     $<span id="min-price">0</span>
                                     @{
@@ -133,10 +124,29 @@
                                            oninput="updatePriceRange()" />
                                     $<span id="display-max-price">@maxPrice</span>
                                 </div>
+                            </div>
                         </div>
-                    </div>
-                        <button class="btn btn-secondary me-2" type="submit" style="margin-top: 10px">Filter</button>
+                        <div class="bb-sidebar-block">
+                            <div class="bb-sidebar-title">
+                                <h4>Sort</h4>
+                            </div>
+                            <div class="bb-select-inner" style="padding-bottom: 10px">
 
+                                <div class="custom-select">
+                                    <select id="sortSelect" name="sort">
+                                        @foreach (var option in ViewBag.SortOptions)
+                                        {
+                                            <option value="@option.Value"
+                                                    selected="@(option.Value == ViewBag.Sort ? "selected" : null)">
+                                                @option.Text
+                                            </option>
+                                        }
+                                    </select>
+
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary me-2" type="submit" style="margin-top: 10px">Filter</button>
                     </form>
                 </div>
             </div>
@@ -159,124 +169,93 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <div class="col-6">
-                                        <div class="bb-select-inner">
-                                            <div class="custom-select">
-                                                <select>
-                                                    <option selected disabled>Sort by</option>
-                                                    <option value="1">Position</option>
-                                                    <option value="2">Relevance</option>
-                                                    <option value="3">Name, A to Z</option>
-                                                    <option value="4">Name, Z to A</option>
-                                                    <option value="5">Price, low to high</option>
-                                                    <option value="6">Price, high to low</option>
-                                                </select>
+
+
+                                </div>
+                            </div>
+                        </div>
+                        @foreach (var product in Model)
+                        {
+                            <div class="col-lg-3 col-md-4 col-6 mb-24 bb-product-box pro-bb-content" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+                                <div class="bb-pro-box">
+                                    <div class="bb-pro-img">
+                                        <a href="javascript:void(0)">
+                                            <div class="inner-img">
+                                                <img class="main-img" src="@Url.Content(@product.Image)"
+                                                     alt="@product.Title">
+                                                <img class="hover-img" src="@Url.Content(@product.Image)"
+                                                     alt="@product.Title">
+                                            </div>
+                                        </a>
+                                        <ul class="bb-pro-actions">
+                                            <li class="bb-btn-group">
+                                                <a href="javascript:void(0)">
+                                                    <i class="ri-heart-line"></i>
+                                                </a>
+                                            </li>
+                                            <li class="bb-btn-group">
+                                                <a href="javascript:void(0)"
+                                                   data-link-action="quickview" title="Quick view" data-bs-toggle="modal"
+                                                   data-bs-target="#bry_quickview_modal">
+                                                    <i class="ri-eye-line"></i>
+                                                </a>
+                                            </li>
+                                            <li class="bb-btn-group">
+                                                <a href="compare.html">
+                                                    <i class="ri-repeat-line"></i>
+                                                </a>
+                                            </li>
+                                            <li class="bb-btn-group">
+                                                <a href="javascript:void(0)">
+                                                    <i class="ri-shopping-bag-4-line"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="bb-pro-contact">
+                                        <div class="bb-pro-subtitle">
+                                            <a href="shop-left-sidebar-col-3.html">@product.ProductCategory.Title</a>
+                                            <span class="bb-pro-rating">
+                                                <i class="ri-star-fill"></i>
+                                                <i class="ri-star-fill"></i>
+                                                <i class="ri-star-fill"></i>
+                                                <i class="ri-star-fill"></i>
+                                                <i class="ri-star-line"></i>
+                                            </span>
+                                        </div>
+                                        <h4 class="bb-pro-title">
+                                            <a href="product-left-sidebar.html">@product.Title</a>
+                                        </h4>
+                                        <p>@product.Detail</p>
+                                        <div class="bb-price">
+                                            <div class="inner-price">
+                                                @if (product.PriceSale > 0)
+                                                {
+                                                    <span class="new-price">@product.PriceSale</span>
+                                                    <span class="old-price">@product.Price</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="new-price">@product.Price</span>
+                                                }
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                          @foreach (var product in Model)
-                                {
-                        <div class="col-lg-3 col-md-4 col-6 mb-24 bb-product-box pro-bb-content" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
-                             
-                            <div class="bb-pro-box">
-                            
-                                    
-                               
-                                <div class="bb-pro-img">
-                                    <a href="javascript:void(0)">
-                                        <div class="inner-img">
-                                            <img class="main-img" src="@Url.Content(@product.Image)"
-                                                 alt="@product.Title">
-                                                <img class="hover-img" src="@Url.Content(@product.Image)"
-                                                     alt="@product.Title">
-                                        </div>
-                                    </a>
-                                    <ul class="bb-pro-actions">
-                                        <li class="bb-btn-group">
-                                            <a href="javascript:void(0)">
-                                                <i class="ri-heart-line"></i>
-                                            </a>
-                                        </li>
-                                        <li class="bb-btn-group">
-                                            <a href="javascript:void(0)"
-                                               data-link-action="quickview" title="Quick view" data-bs-toggle="modal"
-                                               data-bs-target="#bry_quickview_modal">
-                                                <i class="ri-eye-line"></i>
-                                            </a>
-                                        </li>
-                                        <li class="bb-btn-group">
-                                            <a href="compare.html">
-                                                <i class="ri-repeat-line"></i>
-                                            </a>
-                                        </li>
-                                        <li class="bb-btn-group">
-                                            <a href="javascript:void(0)">
-                                                <i class="ri-shopping-bag-4-line"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="bb-pro-contact">
-                                    <div class="bb-pro-subtitle">
-                                        <a href="shop-left-sidebar-col-3.html">@product.ProductCategory.Title</a>
-                                        <span class="bb-pro-rating">
-                                            <i class="ri-star-fill"></i>
-                                            <i class="ri-star-fill"></i>
-                                            <i class="ri-star-fill"></i>
-                                            <i class="ri-star-fill"></i>
-                                            <i class="ri-star-line"></i>
-                                        </span>
-                                    </div>
-                                    <h4 class="bb-pro-title">
-                                        <a href="product-left-sidebar.html">@product.Title</a>
-                                    </h4>
-                                    <p>
-                                        @product.Detail
-                                    </p>
-                                    <div class="bb-price">
-                                        <div class="inner-price">
-                                                @if (product.PriceSale > 0)
-                                                {
-                                                    <span class="new-price">@product.PriceSale</span>
-                                                    <span class="old-price" style="text-decoration: line-through;">@product.Price</span>
-                                                }
-                                                else
-                                                {
-                                                    <span class="old-price">@product.Price</span>
-                                                }
-                                        </div>
-                                        <span class="last-items">1 sản phẩm</span>
-                                    </div>
-                                </div>
-                              
-                            </div>
-                          
-                        </div>
                         }
-                        <div class="col-12">
-                            <div class="bb-pro-pagination">
-                                <p>Showing 1-12 of 21 item(s)</p>
-                                <ul>
-                                    <li class="active">
-                                        <a href="javascript:void(0)">1</a>
+                    </div>
+                    <div class="col-12">
+                        <div class="bb-pro-pagination">
+                            <p>Showing 1-12 of 21 item(s)</p>
+                            <ul>
+                                @for (var i = 1; i <= (ViewBag.TotalItems + ViewBag.PageSize - 1) / ViewBag.PageSize; i++)
+                                {
+                                    <li class="page-item @(ViewBag.Page == i ? "active" : "")">
+                                        <a class="page-link" href="?page=@i&sort=@ViewBag.Sort&categoryId=@ViewContext.HttpContext.Request.Query["categoryId"]&maxPrice=@ViewContext.HttpContext.Request.Query["maxPrice"]">@i</a>
                                     </li>
-                                    <li>
-                                        <a href="javascript:void(0)">2</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">3</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">4</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)" class="next">Next <i class="ri-arrow-right-s-line"></i></a>
-                                    </li>
-                                </ul>
-                            </div>
+                                }
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -284,3 +263,10 @@
         </div>
     </div>
 </section>
+
+
+
+
+
+
+
