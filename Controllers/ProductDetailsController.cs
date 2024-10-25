@@ -86,6 +86,17 @@ namespace TT_ECommerce.Controllers
 
         public IActionResult Index(int id)
         {
+
+            //Hiển thị lượt xem sản phẩm
+            var item = _context.TbProducts.Find(id);
+            if (item != null)
+            {
+                _context.TbProducts.Attach(item);
+                item.ViewCount = item.ViewCount + 1;
+                _context.Entry(item).Property(x => x.ViewCount).IsModified = true;
+                _context.SaveChanges();
+            }
+
             // Lấy sản phẩm theo id từ cơ sở dữ liệu
             var product = _context.TbProducts.FirstOrDefault(p => p.Id == id);
             if (product == null)
