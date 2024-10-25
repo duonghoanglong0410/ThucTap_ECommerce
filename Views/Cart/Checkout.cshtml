@@ -178,11 +178,21 @@
 
 
 <script>
-    document.getElementById('placeOrderBtn').addEventListener('click', function () {
-        // Gọi tới API để lấy URL thanh toán
+    document.getElementById('placeOrderBtn').addEventListener('click', function (event) {
+        // Ngăn chặn hành động mặc định của nút submit
+        event.preventDefault();
 
-        var amount = "@((long)((totalAmount + ship)) * 100)";  //Giá trị amount mẫu, lấy từ context thực tế
+        // Kiểm tra phương thức thanh toán đã chọn
+        var paymentMethod = document.querySelector('input[name="payment-method"]:checked');
+
+        if (!paymentMethod) {
+            alert("Vui lòng chọn phương thức thanh toán!");
+            return;
+        }
+
+        var amount = "@((long)((totalAmount + ship)) * 100)";  // Giá trị amount mẫu, lấy từ context thực tế
         var infor = '@Model.FirstOrDefault()?.Email';  // Thông tin thanh toán mẫu
+
         // Lấy ngày giờ hiện tại
         var now = new Date();
         var year = now.getFullYear();
@@ -195,25 +205,30 @@
         // Tạo mã hóa đơn dựa trên ngày giờ (yyyymmddHHMMSS)
         var orderinfor = year + month + day + hours + minutes + seconds;
 
-        var url = `/VNPayAPI/${amount}&${infor}&${orderinfor}`;
+        if (paymentMethod.value === "vnpay") {
+            // Nếu chọn VNPay, gọi API VNPay
+            var url = `/VNPayAPI/${amount}&${infor}&${orderinfor}`;
 
-        fetch(url, {
-            method: 'GET',
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.error('@@data:', data);
-                if (data.url) {
-                    // Đóng tab hiện tại
-                    //window.close();
-                    // Mở tab mới với URL trả về từ máy chủ
-                    //window.open(data.url, '_blank');
-                    window.location.href = data.url;
-                }
+            fetch(url, {
+                method: 'GET',
             })
-            .catch(error => {
-                console.error('Có lỗi xảy ra:', error);
-            });
+                .then(response => response.json())
+                .then(data => {
+                    console.error('@@data:', data);
+                    if (data.url) {
+                        window.location.href = data.url; // Chuyển hướng đến URL VNPay
+                    }
+                })
+                .catch(error => {
+                    console.error('Có lỗi xảy ra:', error);
+                });
+        } else if (paymentMethod.value === "cash") {
+            // Nếu chọn Cash On Delivery, có thể thực hiện logic khác (ví dụ: gửi form)
+            document.querySelector('form').submit(); // Gửi form
+            alert("Đặt hàng thành công! Cảm ơn bạn đã mua hàng.");
+            return window.location.href = '/';
+        }
     });
 </script>
+
 <!-- Checkout Page End -->

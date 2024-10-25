@@ -38,25 +38,57 @@ namespace TT_ECommerce.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> PlaceOrder(TbOrder order)
+        public IActionResult ClearCart()
         {
-            // Kiểm tra tính hợp lệ của dữ liệu
-            if (!ModelState.IsValid)
+            // Lấy tất cả các đơn hàng trong cơ sở dữ liệu
+            var orders = _context.TbOrders
+                .Include(o => o.TbOrderDetails) // Bao gồm chi tiết đơn hàng
+                .ToList();
+
+            // Xóa tất cả chi tiết đơn hàng và các đơn hàng
+            foreach (var order in orders)
             {
-                return View(order); // Trả về view với thông tin lỗi nếu có
+                _context.TbOrderDetails.RemoveRange(order.TbOrderDetails); // Xóa tất cả chi tiết đơn hàng
+                _context.TbOrders.Remove(order); // Xóa đơn hàng
             }
 
-            // Thiết lập thông tin cho đơn hàng
-            order.CreatedDate = DateTime.Now;
-            order.ModifiedDate = DateTime.Now;
+            _context.SaveChanges(); // Lưu thay đổi vào cơ sở dữ liệu
 
-
-            // Lưu vào cơ sở dữ liệu
-            await _context.TbOrders.AddAsync(order);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction("Success"); // Chuyển đến trang thành công sau khi lưu
+            return RedirectToAction("Index"); // Chuyển hướng về trang giỏ hàng
         }
+
+        [HttpPost]
+        public IActionResult PlaceOrder(TbOrder model)
+        {
+            if (ModelState.IsValid)
+            {
+                // Tạo mới một đối tượng TbOrder
+                var order = new TbOrder
+                {
+                    CustomerName = model.CustomerName,
+                    Phone = model.Phone,
+                    Address = model.Address,
+                    TotalAmount = model.TotalAmount,
+                    Quantity = model.Quantity,
+                    CreatedDate = DateTime.Now,
+                    ModifiedDate = DateTime.Now,
+                };
+
+                // Thêm đơn hàng vào DbContext
+                _context.TbOrders.Add(order);
+                _context.SaveChanges(); // Lưu thay đổi vào cơ sở dữ liệu
+
+                // Xóa giỏ hàng sau khi thanh toán
+                ClearCart(); // Gọi phương thức ClearCart để xóa giỏ hàng
+
+                // Chuyển hướng đến trang thành công hoặc trang nào đó
+                return RedirectToAction("OrderSuccess"); // Đặt tên cho action thành công của bạn
+            }
+
+            // Nếu model không hợp lệ, trả lại view với model để hiển thị lỗi
+            return View(model);
+        }
+
 
         public IActionResult Checkout()
         {

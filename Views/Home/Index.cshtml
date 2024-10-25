@@ -21,4 +21,11 @@
 
 @Html.Partial("~/Views/Shared/Partials/_Newsletter.cshtml")
 
+<!-- Ví dụ trong View (Index.cshtml) -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <script>
+        alert('@TempData["SuccessMessage"]');
+    </script>
+}
 

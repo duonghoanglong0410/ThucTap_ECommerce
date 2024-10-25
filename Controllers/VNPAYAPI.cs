@@ -51,7 +51,7 @@ namespace TT_ECommerce.Controllers
             _context = context;
         }
         [Route("/VNpayAPI/paymentconfirm")]
-        public IActionResult PaymentConfirm()
+        public async Task<IActionResult> PaymentConfirm()
         {
             if (Request.QueryString.HasValue)
             {
@@ -67,36 +67,37 @@ namespace TT_ECommerce.Controllers
 
                 bool checkSignature = ValidateSignature(Request.QueryString.Value.Substring(1, pos - 1), vnp_SecureHash, hashSecret); // Kiểm tra chữ ký
 
-                if (checkSignature && tmnCode == json["vnp_TmnCode"].ToString())
+                if (vnp_ResponseCode == "00")
                 {
-                    if (vnp_ResponseCode == "00")
+                    // Thanh toán thành công
+                    var cartItems = _context.TbOrderDetails.Where(c => c.OrderId == orderId).ToList();
+                    Console.WriteLine($"Số lượng mục trong giỏ hàng: {cartItems.Count}");
+
+                    if (cartItems != null && cartItems.Count > 0)
                     {
-                        // Thanh toán thành công
-
-                        // Lấy ID người dùng hiện tại
-                        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-                        // Xử lý việc xóa tất cả các chi tiết trong giỏ hàng của người dùng
-                        var cartItems = _context.TbOrderDetails.Where(c => c.Id == orderId).ToList();
-
-                        if (cartItems != null && cartItems.Count > 0)
+                        try
                         {
-                            // Xóa tất cả các chi tiết giỏ hàng
                             _context.TbOrderDetails.RemoveRange(cartItems);
-
-                            // Lưu thay đổi vào cơ sở dữ liệu
-                            _context.SaveChanges();
+                            await _context.SaveChangesAsync();
+                            Console.WriteLine($"Đã xóa {cartItems.Count} mục.");
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Lỗi khi lưu thay đổi: {ex.Message}");
                         }
 
-                        // Điều hướng về trang thông báo thành công
-                        return Redirect("LINK_THANH_TOAN_THANH_CONG");
+                        // Kiểm tra số lượng mục còn lại
+                        var remainingItems = _context.TbOrderDetails.Where(c => c.OrderId == orderId).ToList();
+                        Console.WriteLine($"Số lượng mục còn lại trong giỏ hàng: {remainingItems.Count}");
                     }
-                    else
-                    {
-                        // Thanh toán không thành công
-                        return Redirect("LINK_THANH_TOAN_THAT_BAI");
-                    }
+
+                    // Lưu thông điệp vào TempData để hiển thị trên trang Home
+                    TempData["SuccessMessage"] = "Thanh toán thành công";
+
+                    // Điều hướng về trang Home
+                    return RedirectToAction("Index", "Home");
                 }
+
                 else
                 {
                     // Phản hồi không khớp với chữ ký
@@ -104,8 +105,9 @@ namespace TT_ECommerce.Controllers
                 }
             }
             // Phản hồi không hợp lệ
-            return Redirect("LINK_PHAN_HOI_KHONG_HOP_LE");
+            return Redirect("LINK_PHAN_HANH_KHONG_HOP_LE");
         }
+
 
 
         public bool ValidateSignature(string rspraw, string inputHash, string secretKey)
