@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace TT_ECommerce.Areas.Admin.Controllers
 {
-    [Authorize]
     [Area("Admin")]
     public class HomeController : Controller
     {
