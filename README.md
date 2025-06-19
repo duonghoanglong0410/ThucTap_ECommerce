@@ -50,7 +50,6 @@ Dự án ECommerce là một ứng dụng web được phát triển bằng ASP.
    git clone https://github.com/username/ThucTap.git
    cd ThucTap
     ```
-   ```
 2. Khôi phục các gói NuGet
    
    ```bash
